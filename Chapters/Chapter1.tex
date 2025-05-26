@@ -163,19 +163,19 @@ los modelos pueden perpetuar o amplificar prejuicios sociales presentes en los d
 Para mitigar estos problemas utilizan las siguientes tecnicas:
 \begin{itemize}
 \item Generación aumentada por recuperación:
-Esta técnica permite a los modelos consultar fuentes de datos externas 
+esta técnica permite a los modelos consultar fuentes de datos externas 
 y ampliar la información de la entrada con elementos que están fuera de su entrenamiento inicial
 o de su ventana de contexto inmediata.
 Esto reduce las alucinaciones y mejora la verosimilitud de la respuesta.
 \item Filtrado de datos de entrenamiento: 
-Se implementan procesos más rigurosos para limpiar y despolarizar los conjuntos de datos de entrenamiento,
+se implementan procesos más rigurosos para limpiar y despolarizar los conjuntos de datos de entrenamiento,
 para minimizar la presencia de sesgos.
 \item \textit{Fine-tuning}
 \footnote{La idea de \textit{fine-tuning} se popularizó enormemente con el desarrollo de los modelos de lenguaje pre-entrenados,
 siendo el paper de BERT\cite{Devlin2019BERT} uno de los más influyentes al respecto.}: 
 consiste en la adaptación de los modelos a tareas específicas a través de un proceso de reentrenamiento parcial.
 \item \textit{Prompt engineering}
-\footnote{El concepto de prompt engineering se hizo fundamentalmente relevante y visible con la publicación del paper de GPT-3\cite{Brown2020GPT3},
+\footnote{El concepto de \textit{prompt engineering} se hizo fundamentalmente relevante y visible con la publicación del paper de GPT-3\cite{Brown2020GPT3},
 que demostró las capacidades de aprendizaje \textit{few-shot} e \textit{in-context learning} mediante la formulación de instrucciones de texto.}:
 se basa en la formulación precisa de instrucciones en la entrada para guiar la generación de la respuesta 
 y obtener mejores resultados.
