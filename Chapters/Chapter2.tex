@@ -5,198 +5,192 @@
 %----------------------------------------------------------------------------------------
 %	SECTION 1
 %----------------------------------------------------------------------------------------
-Todos los capítulos deben comenzar con un breve párrafo introductorio que indique cuál es el contenido que se encontrará al leerlo.  La redacción sobre el contenido de la memoria debe hacerse en presente y todo lo referido al proyecto en pasado, siempre de modo impersonal.
+En este capítulo se profundiza en aquellos aspectos clave para el desarrollo de este trabajo.
+En primer lugar, se presentan los requerimientos de sistema y se amplía la información acerca de los modelos de 
+inteligencia artificial que se han utilizado.
+Finalmente, se expone el conjunto de técnicas y herramientas que se han aplicado a dichos modelos.
 
-\section{Estilo y convenciones}
-\label{sec:ejemplo}
-
-\subsection{Uso de mayúscula inicial para los título de secciones}
-
-Si en el texto se hace alusión a diferentes partes del trabajo referirse a ellas como capítulo, sección o subsección según corresponda. Por ejemplo: ``En el capítulo \ref{Chapter1} se explica tal cosa'', o ``En la sección \ref{sec:ejemplo} se presenta lo que sea'', o ``En la subsección \ref{subsec:ejemplo} se discute otra cosa''.
-
-Cuando se quiere poner una lista tabulada, se hace así:
-
-\begin{itemize}
-	\item Este es el primer elemento de la lista.
-	\item Este es el segundo elemento de la lista.
-\end{itemize}
-
-Notar el uso de las mayúsculas y el punto al final de cada elemento.
-
-Si se desea poner una lista numerada el formato es este:
+\section{Requerimientos del sistema}
+Para llevar a cabo este trabajo
+se identificaron una serie de requerimientos fundamentales.
+A continuación se listan aquellos que están directamente relacionados con la implementación:
 
 \begin{enumerate}
-	\item Este es el primer elemento de la lista.
-	\item Este es el segundo elemento de la lista.
+	\item Requerimientos del servidor:
+	      \begin{enumerate}
+		      \item El servidor debe alojar y administrar la información relativa al \textit{dataset} y la configuración del modelo LLM.
+		      \item El servidor debe contar con los \textit{prompts} necesarios para especializar la respuesta de  la Inteligencia Artificial.
+		      \item Al ser desplegado, el servidor deberá acceder al módulo LLM y utilizarlo en el procesamiento de peticiones entrantes.
+		      \item El servidor debe dar acceso a clientes externos a través del protocolo API REST.
+		      \item Los servicios REST deben aceptar entrada de texto en varios formatos: pdf, txt, word o texto plano en el cuerpo de la petición.
+		      \item Los servicios REST devolverán la respuesta en formato simple HTML para su cómoda visualización en un navegador.
+		      \item El prototipo del servidor debe de tener una disponibilidad del 100\% durante la demostración.
+	      \end{enumerate}
+	\item Requerimientos del módulo LLM:
+	      \begin{enumerate}
+		      \item El módulo LLM debe aceptar entrada de texto y generar texto como salida.
+		      \item El módulo LLM, si el texto de entrada es legible, debe aportar una respuesta con un detalle y profundidad razonables,
+		            además de ser coherente con las instrucciones recibidas.
+		      \item El módulo se ajustará a los prompts recibidos para que, con el mismo contexto,
+			  		devuelva información enfocada en un aspecto específico de la narrativa.
+		      \item El tiempo de respuesta del módulo LLM debe estar en un rango de tiempo razonable para un servicio REST (no más de 5 minutos).
+	      \end{enumerate}
 \end{enumerate}
 
-Notar el uso de las mayúsculas y el punto al final de cada elemento.
+Además, se identificaron requisitos adicionales relacionados con las pruebas,
+la documentación y los aspectos legales. 
+Estos requisitos son vitales para asegurar la calidad del trabajo 
+y garantizar el cumplimiento de los marcos legales pertinentes, 
+incluyendo lo relativo a la propiedad intelectual, el uso de librerías de código abierto 
+y la utilización de modelos con licencia libre o académica.
 
-\subsection{Este es el título de una subsección}
-\label{subsec:ejemplo}
+%----------------------------------------------------------------------------------------
+%	SECTION 2
+%----------------------------------------------------------------------------------------
 
-Se recomienda no utilizar \textbf{texto en negritas} en ningún párrafo, ni tampoco texto \underline{subrayado}. En cambio sí se debe utilizar \textit{texto en itálicas} para palabras en un idioma extranjero, al menos la primera vez que aparecen en el texto. En el caso de palabras que estamos inventando se deben utilizar ``comillas'', así como también para citas textuales. Por ejemplo, un \textit{digital filter} es una especie de ``selector'' que permite separar ciertos componentes armónicos en particular.
+\section{Modelos extensos de lenguaje}
+Para abordar los requisitos de generación de texto resultó fundamental la utilización 
+de modelos extensos de lenguaje, comúnmente denominados \textit{Large Language Models} (LLM).
+Estos modelos son entrenados sobre enormes volúmenes de datos textuales para especializarlos
+en predecir la secuencia de texto más probable dada una entrada previa.
+Esta habilidad les permite generar texto de forma coherente con el contexto
+al adaptarse al tono, estilo y contenido esperado.
 
-La escritura debe ser impersonal. Por ejemplo, no utilizar ``el diseño del firmware lo hice de acuerdo con tal principio'', sino ``el firmware fue diseñado utilizando tal principio''. 
+Para conseguirlo, los LLM se basan en redes neuronales profundas que manejan miles de millones de parámetros
+(lo que justifica su clasificación como modelos ``extensos'') para identificar patrones complejos del lenguaje natural \cite{att_is_all_you_need}. 
+Estos modelos utilizan \textit{tokens} como unidad básica de texto en su procesamiento.
+Los \textit{tokens} pueden representar palabras completas, fragmentos de palabras o signos de puntuación,
+dependiendo del sistema de tokenización utilizado.
+Estos \textit{tokens} se convierten posteriormente en vectores numéricos
+mediante una capa de \textit{embedding}\cite{mikolov2013efficient}, que permite al modelo operar sobre ellos.
 
-El trabajo es algo que al momento de escribir la memoria se supone que ya está concluido, entonces todo lo que se refiera a hacer el trabajo se narra en tiempo pasado, porque es algo que ya ocurrió. Por ejemplo, "se diseñó el firmware empleando la técnica de test driven development".
+Los LLM modernos utilizan la arquitectura de \textit{transformers}\cite{att_is_all_you_need},
+un tipo de red neuronal que permite procesar secuencias de texto en paralelo y asignar diferentes niveles de relevancia
+(atención) a distintas partes del texto mediante un mecanismo llamado \textit{self-attention}.
+Esta arquitectura supera notablemente a estructuras anteriores como \textit{Long-Short Term Memory}\cite{hochreiter1997long}
+o \textit{Gated Recurrent Unit}\cite{cho2014learning} en cuestiones de eficiencia y rendimiento.
 
-En cambio, la memoria es algo que está vivo cada vez que el lector la lee. Por eso transcurre siempre en tiempo presente, como por ejemplo:
+Además de su capacidad de paralelización y memoria a largo plazo, los LLM basados en \textit{transformers} operan 
+mediante la predicción de la siguiente cadena de \textit{tokens} a partir del contexto previo.
+En este proceso hay elementos que controlan la generacion, entre los que se destaca la temperatura\cite{radford2019language}.
+La temperatura regula la aleatoriedad de los tokens: valores bajos tienden a generar respuestas deterministas,
+mientras que valores altos proporcionan respuestas más diversas y creativas\footnote{
+	Esto también aumenta las probabilidades de que esta respuesta sea incoherente, también llamada alucinación.
+}. Existen otros parámetros que controlan la variedad del texto, por ejemplo \textit{top-k} y \textit{top-p}\cite{holtzman2019curious}.
 
-``En el presente capítulo se da una visión global sobre las distintas pruebas realizadas y los resultados obtenidos. Se explica el modo en que fueron llevados a cabo los test unitarios y las pruebas del sistema''.
+A medida que los LLM aumentan en extensión de parámetros y profundidad de entrenamiento, empiezan a manifestar cualidades
+que no fueron explícitamente programadas. Entre estas capacidades destacan el razonamiento en múltiples pasos,
+traducción automática entre idiomas, capacidad de responder a preguntas complejas y generación creativa y coherente de texto
+que va más allá de la simple predicción de cadenas de texto.
 
-Se recomienda no utilizar una sección de glosario sino colocar la descripción de las abreviaturas como parte del mismo cuerpo del texto. Por ejemplo, RTOS (\textit{Real Time Operating System}, Sistema Operativo de Tiempo Real) o en caso de considerarlo apropiado mediante notas a pie de página.
+Por ejemplo, modelos como GPT-3\cite{Brown2020GPT3} de OpenAI, PaLM\cite{chowdhery2022palm} de Google 
+y LLaMA\cite{touvron2023llama} de Meta han demostrado un rendimiento notable
+en multitud de tareas complejas. Algunos ejemplos son realizar inferencias lógicas, resolver problemas matemáticos,
+resumir textos extensos y generar código a partir de descripciones en lenguaje natural.
+Esto no solo amplía el espectro de aplicaciones prácticas de los LLM,
+sino que también plantea nuevas líneas de investigación para comprender cómo el tamaño y
+la calidad del entrenamiento impactan en la adquisición de habilidades cognitivas sofisticadas.
 
-Si se desea indicar alguna página web utilizar el siguiente formato de referencias bibliográficas, dónde las referencias se detallan en la sección de bibliografía de la memoria, utilizado el formato establecido por IEEE en \citep{IEEE:citation}. Por ejemplo, ``el presente trabajo se basa en la plataforma EDU-CIAA-NXP \citep{CIAA}, la cual...''.
+%----------------------------------------------------------------------------------------
+%	SECTION 3
+%----------------------------------------------------------------------------------------
 
-\subsection{Figuras} 
+\section{Ingeniería de prompts}
+La ingeniería de \textit{prompts} (\textit{prompt engineering}) es una técnica fundamental en la optimización de la salida de los modelos extensos de lenguaje
+que se basa en guiar el proceso de razonamiento del modelo hacia un objetivo específico a través de un conjunto de entradas textuales.
+A diferencia de la programación tradicional, donde se expresa de forma explícita la lógica mediante el uso de código en un lenguaje de programación,
+el comportamiento de los LLM se guía mediante lenguaje natural.
 
-Al insertar figuras en la memoria se deben considerar determinadas pautas. Para empezar, usar siempre tipografía claramente legible. Luego, tener claro que \textbf{es incorrecto} escribir por ejemplo esto: ``El diseño elegido es un cuadrado, como se ve en la siguiente figura:''
+Esta técnica ha emergido como una nueva disciplina en la que intervienen conceptos linguísticos y computacionales.
+La forma en la que se redacta una instrucción puede influir de forma notable en la coherencia, relevancia, creatividad
+y precisión de las respuestas.
 
-\begin{figure}[h]
-\centering
-\includegraphics[scale=.45]{./Figures/cuadradoAzul.png}
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.9\textwidth]{./Figures/prompting.png}
+	\caption{Ejemplo de uso de técnicas de prompting.}
+	\label{fig:prompting}
 \end{figure}
 
-La forma correcta de utilizar una figura es con referencias cruzadas, por ejemplo: ``Se eligió utilizar un cuadrado azul para el logo, como puede observarse en la figura \ref{fig:cuadradoAzul}''.
+Entre las estrategias comunes de ingeniería de prompts se encuentran el \textit{zero/few-shot prompting}\cite{brown2020language,kojima2022large}, que se apoya en 
+ejemplos en el prompts para guiar la generación; el \textit{chain of thought prompting}\cite{wei2022chain} invita al modelo a razonar explícitamente
+los pasos intermedios antes de llegar a la conclusión; o \textit{prompt chaining}\cite{promptchaining2023} que invita al modelo a realizar un análisis previo
+sobre el contexto o instrucciones para enfocar la salida.
+En la figura \ref{fig:prompting}\footnote{
+	Imagen obtenida del material del curso de especializacion en inteligencia artificial de la FIUBA,
+	materia de \textit{LLM} \cite{fiubaPrompt} 
+	} se ilustra cómo estas estrategias de instrucción afectan directamente la salida generada por el modelo.
+Cabe destacar que las distintas técnicas de prompting descritas no son excluyentes entre sí,
+sino que pueden combinarse de manera complementaria, potenciando así la capacidad de razonamiento
+y la precisión de los LLM en tareas complejas.
 
-\begin{figure}[ht]
-	\centering
-	\includegraphics[scale=.45]{./Figures/cuadradoAzul.png}
-	\caption{Ilustración del cuadrado azul que se eligió para el diseño del logo.}
-	\label{fig:cuadradoAzul}
-\end{figure}
+A su vez, la ingeniería de \textit{prompts} ha demostrado ser fundamental en aquellos contextos en los que
+el \textit{fine-tuning} no es viable, ya que hay muchos modelos cerrados que solo son accesibles a través de una API
+y la capacidad de modificar su comportamiento sin reentrenamiento se vuelve crucial.
+Por lo tanto, esta técnica se convierte en una herramienta práctica, eficiente y cada vez más sofisticada
+para adaptar modelos generalistas a tareas específicas.
 
-El texto de las figuras debe estar siempre en español, excepto que se decida reproducir una figura original tomada de alguna referencia. En ese caso la referencia de la cual se tomó la figura debe ser indicada en el epígrafe de la figura e incluida como una nota al pie, como se ilustra en la figura \ref{fig:palabraIngles}.
+%----------------------------------------------------------------------------------------
+%	SECTION 4
+%----------------------------------------------------------------------------------------
 
-\begin{figure}[htpb]
-	\centering
-	\includegraphics[scale=.3]{./Figures/word.jpeg}
-	\caption{Imagen tomada de la página oficial del procesador\protect\footnotemark.}
-	\label{fig:palabraIngles}
-\end{figure}
+\section{Ajuste fino}
+El ajuste fino (\textit{fine-tuning})\cite{howard2018universal} es una técnica de entrenamiento de modelos extensos de lenguaje 
+que permite adaptar un modelo previamente entrenado a una tarea en específico.
+A diferencia del entrenamiento desde cero, esta técnica parte de una base
+y lo especializa utilizando un conjunto mucho más pequeño y específico de datos.
+De este modo se reduce significativamente el coste computacional a la vez que se aprovecha
+la capacidad predictiva del modelo del que se parte.
 
-\footnotetext{Imagen tomada de \url{https://goo.gl/images/i7C70w}}
+Para llevar a cabo el ajuste fino, se conserva la estructura y los parámetros previamente entrenados del modelo base,
+evitando así la necesidad de un entrenamiento completo desde cero.
+En la práctica, el proceso de fine-tuning suele centrarse en modificar únicamente una parte reducida del modelo,
+como las capas superiores, que son las más cercanas a la salida y, por tanto,
+más fácilmente adaptables a tareas específicas.
+Alternativamente, pueden integrarse nuevas capas que se entrenan sin alterar el resto del modelo.
+Esta aproximación permite preservar los conocimientos generales adquiridos durante el preentrenamiento,
+mientras se optimiza la capacidad del modelo para tareas concretas.
 
-La figura y el epígrafe deben conformar una unidad cuyo significado principal pueda ser comprendido por el lector sin necesidad de leer el cuerpo central de la memoria. Para eso es necesario que el epígrafe sea todo lo detallado que corresponda y si en la figura se utilizan abreviaturas entonces aclarar su significado en el epígrafe o en la misma figura.
+Además, en escenarios donde los recursos computacionales son limitados,
+se utilizan técnicas de ajuste fino eficiente (parameter-efficient fine-tuning, PEFT),
+como LoRA (\textit{Low-Rank Adaptation})\cite{hu2021lora},
+\textit{prefix tuning}\cite{li2021prefix} o \textit{prompt tuning}.
+Estas estrategias reducen la cantidad de parámetros que deben entrenarse,
+lo que no solo disminuye el tiempo de ajuste y el consumo de memoria,
+sino que también facilita la reutilización del modelo base en múltiples contextos sin interferencia entre tareas.
 
+Al adaptar un modelo generalista a contextos específicos,
+se logra una mejora sustancial en la precisión, relevancia y
+sensibilidad del modelo frente a matices del lenguaje propios del área de aplicación.
+No obstante, es fundamental contar con datos de alta calidad y
+bien etiquetados para evitar la sobreespecialización o la introducción de sesgos.
 
+\pagebreak
+%----------------------------------------------------------------------------------------
+%	SECTION 5
+%----------------------------------------------------------------------------------------
+\section{LM Studio y otras tecnologías}
+LM Studio\cite{lmstudio} es una plataforma de código abierto diseñada para facilitar la interacción
+y despliegue de modelos extensos de lenguaje (LLM) de manera local,
+permitiendo a los usuarios ejecutar y experimentar con modelos sin depender de servicios en la nube.
+Esta herramienta destaca por su integración sencilla, soporte para múltiples formatos de modelos y una interfaz amigable.
 
-\begin{figure}[ht]
-	\centering
-	\includegraphics[scale=.37]{./Figures/questionMark.png}
-	\caption{¿Por qué de pronto aparece esta figura?}
-	\label{fig:questionMark}
-\end{figure}
+Una de las ventajas clave de LM Studio es su capacidad para manejar modelos grandes y complejos con eficiencia,
+ofreciendo funcionalidades como la gestión de memoria optimizada,
+soporte para cuantización y carga progresiva de modelos.
+Esto permite que usuarios con recursos limitados puedan aprovechar la potencia de los LLM
+sin necesidad de infraestructura costosa.
+Además, LM Studio facilita la personalización de modelos mediante interfaces accesibles,
+lo que la convierte en una opción popular tanto para investigadores como para desarrolladores
+que desean incorporar inteligencia artificial avanzada en sus proyectos.
 
-Nunca colocar una figura en el documento antes de hacer la primera referencia a ella, como se ilustra con la figura \ref{fig:questionMark}, porque sino el lector no comprenderá por qué de pronto aparece la figura en el documento, lo que distraerá su atención.
+Para la implementación del \textit{backend} de la aplicación que interactúa con LM Studio, se utilizó \textit{Python},
+un lenguaje de programación ampliamente adoptado en el ámbito de la inteligencia artificial por su simplicidad
+y la gran cantidad de bibliotecas disponibles.
+Se empleó la librería de \textit{FastAPI}\cite{fastapi} en al construcción del servidor web gracias a su sintaxis intuitiva,
+lo que facilitó la creación de \textit{endpoints} eficientes para la comunicación entre el usuario y el modelo.
 
-Otra posibilidad es utilizar el entorno \textit{subfigure} para incluir más de una figura, como se puede ver en la figura \ref{fig:three graphs}. Notar que se pueden referenciar también las figuras internas individualmente de esta manera: \ref{fig:1de3}, \ref{fig:2de3} y \ref{fig:3de3}.
- 
-\begin{figure}[!htpb]
-     \centering
-     \begin{subfigure}[b]{0.3\textwidth}
-         \centering
-         \includegraphics[width=.65\textwidth]{./Figures/questionMark}
-         \caption{Un caption.}
-         \label{fig:1de3}
-     \end{subfigure}
-     \hfill
-     \begin{subfigure}[b]{0.3\textwidth}
-         \centering
-         \includegraphics[width=.65\textwidth]{./Figures/questionMark}
-         \caption{Otro.}
-         \label{fig:2de3}
-     \end{subfigure}
-     \hfill
-     \begin{subfigure}[b]{0.3\textwidth}
-         \centering
-         \includegraphics[width=.65\textwidth]{./Figures/questionMark}
-         \caption{Y otro más.}
-         \label{fig:3de3}
-     \end{subfigure}
-        \caption{Tres gráficos simples.}
-        \label{fig:three graphs}
-\end{figure}
-
-El código para generar las imágenes se encuentra disponible para su reutilización en el archivo \file{Chapter2.tex}.
-
-\subsection{Tablas}
-
-Para las tablas utilizar el mismo formato que para las figuras, sólo que el epígrafe se debe colocar arriba de la tabla, como se ilustra en la tabla \ref{tab:peces}. Observar que sólo algunas filas van con líneas visibles y notar el uso de las negritas para los encabezados.  La referencia se logra utilizando el comando \verb|\ref{<label>}| donde label debe estar definida dentro del entorno de la tabla.
-
-\begin{verbatim}
-\begin{table}[h]
-	\centering
-	\caption[caption corto]{caption largo más descriptivo}
-	\begin{tabular}{l c c}    
-		\toprule
-		\textbf{Especie}     & \textbf{Tamaño} & \textbf{Valor}\\
-		\midrule
-		Amphiprion Ocellaris & 10 cm           & \$ 6.000 \\		
-		Hepatus Blue Tang    & 15 cm           & \$ 7.000 \\
-		Zebrasoma Xanthurus  & 12 cm           & \$ 6.800 \\
-		\bottomrule
-		\hline
-	\end{tabular}
-	\label{tab:peces}
-\end{table}
-\end{verbatim}
-
-
-\begin{table}[h]
-	\centering
-	\caption[caption corto]{caption largo más descriptivo.}
-	\begin{tabular}{l c c}    
-		\toprule
-		\textbf{Especie} 	 & \textbf{Tamaño} 		& \textbf{Valor}  \\
-		\midrule
-		Amphiprion Ocellaris & 10 cm 				& \$ 6.000 \\		
-		Hepatus Blue Tang	 & 15 cm				& \$ 7.000 \\
-		Zebrasoma Xanthurus	 & 12 cm				& \$ 6.800 \\
-		\bottomrule
-		\hline
-	\end{tabular}
-	\label{tab:peces}
-\end{table}
-
-En cada capítulo se debe reiniciar el número de conteo de las figuras y las tablas, por ejemplo, figura 2.1 o tabla 2.1, pero no se debe reiniciar el conteo en cada sección. Por suerte la plantilla se encarga de esto por nosotros.
-
-\subsection{Ecuaciones}
-\label{sec:Ecuaciones}
-
-Al insertar ecuaciones en la memoria dentro de un entorno \textit{equation}, éstas se numeran en forma automática  y se pueden referir al igual que como se hace con las figuras y tablas, por ejemplo ver la ecuación \ref{eq:metric}.
-
-\begin{equation}
-	\label{eq:metric}
-	ds^2 = c^2 dt^2 \left( \frac{d\sigma^2}{1-k\sigma^2} + \sigma^2\left[ d\theta^2 + \sin^2\theta d\phi^2 \right] \right)
-\end{equation}
-                                                        
-Es importante tener presente que si bien las ecuaciones pueden ser referidas por su número, también es correcto utilizar los dos puntos, como por ejemplo ``la expresión matemática que describe este comportamiento es la siguiente:''
-
-\begin{equation}
-	\label{eq:schrodinger}
-	\frac{\hbar^2}{2m}\nabla^2\Psi + V(\mathbf{r})\Psi = -i\hbar \frac{\partial\Psi}{\partial t}
-\end{equation}
-
-Para generar la ecuación \ref{eq:metric} se utilizó el siguiente código:
-
-\begin{verbatim}
-\begin{equation}
-	\label{eq:metric}
-	ds^2 = c^2 dt^2 \left( \frac{d\sigma^2}{1-k\sigma^2} + 
-	\sigma^2\left[ d\theta^2 + 
-	\sin^2\theta d\phi^2 \right] \right)
-\end{equation}
-\end{verbatim}
-
-Y para la ecuación \ref{eq:schrodinger}:
-
-\begin{verbatim}
-\begin{equation}
-	\label{eq:schrodinger}
-	\frac{\hbar^2}{2m}\nabla^2\Psi + V(\mathbf{r})\Psi = 
-	-i\hbar \frac{\partial\Psi}{\partial t}
-\end{equation}
-
-\end{verbatim}
+Por otro lado, \textit{PyTorch}\cite{pytorch} es la biblioteca de referencia para el desarrollo 
+y entrenamiento de modelos de aprendizaje profundo, incluyendo los LLM.
+Proporciona una interfaz dinámica y flexible que permite tanto el entrenamiento
+como la inferencia eficiente en hardware acelerado, y es compatible con múltiples plataformas.
