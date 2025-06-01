@@ -10,6 +10,7 @@
 *~
 
 # Ignora carpetas específicas (por ejemplo, la carpeta de salida)
+/Deriveables/Corrections/
 /Examples/
 /output/
 Figuras/logoFIUBA.pdf
