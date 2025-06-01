@@ -25,7 +25,7 @@ y se establecen los objetivos y el alcance definidos durante su realización.
 %----------------------------------------------------------------------------------------
 \section{El desafío de la creación narrativa}
 
-La narrativa\cite{narrative_def} es un género literario que relata un conjunto de sucesos
+La narrativa \cite{narrative_def} es un género literario que relata un conjunto de sucesos
 protagonizados por uno o más personajes y que son presentados a través de un narrador.
 Se trata de una forma de expresión cultural fundamental, presente en todas las culturas y épocas,
 utilizado para entretener y transmitir conocimiento.
@@ -41,7 +41,7 @@ En este ejercicio mental intervienen múltiples factores, como la coherencia int
 entre los distintos elementos que conforman la historia en el espacio y el tiempo.
 Estas variables se vuelven especialmente complejas en narrativas con una alta carga ficticia
 donde se inventan, además de los personajes y sucesos, contextos completos.
-Aquí es donde cobra especial relevancia la construcción de mundos\cite{world_building}, un recurso narrativo fundamental que permite
+Aquí es donde cobra especial relevancia la construcción de mundos \cite{world_building}, un recurso narrativo fundamental que permite
 al escritor diseñar entornos imaginarios detallados y capaces de sostener la lógica del relato.
 
 El proceso de creación de mundos es tan complejo como la narrativa que busca sustentar y
@@ -53,7 +53,7 @@ y la manera en que estos se relacionan entre sí para dar cohesión al conjunto 
 \begin{figure}[htbp]
 	\centering
 	\includegraphics[width=0.9\textwidth]{./Figures/world-building-elements.png}
-	\caption{Esquema de elementos habituales en la construcción de mundos}
+	\caption{Esquema de elementos habituales en la construcción de mundos.}
 	\label{fig:worldBuildingElements}
 \end{figure}
 
@@ -77,9 +77,9 @@ al facilitar el desarrollo de contenidos y aportar ideas que estimulen la creaci
 
 \section{Motivación}
 El trabajo se enfocó en la creación de entornos narrativos para juegos de rol 
-y surgió de la colaboración con la empresa Critical Match\cite{crit_match_web} y su objetivo de ampliar las herramientas 
+y surgió de la colaboración con la empresa Critical Match \cite{crit_match_web} y su objetivo de ampliar las herramientas 
 y servicios para los usuarios de su aplicación de móvil.
-La \textit{app}\cite{crit_match_app} permite la creación y búsqueda de salas de juego que se ajusten a las necesidades y preferencias de cada usuario.
+La \textit{app} \cite{crit_match_app} permite la creación y búsqueda de salas de juego que se ajusten a las necesidades y preferencias de cada usuario.
 En ese contexto, se busca mejorar la ambientación de las partidas proporcionando al autor de la narrativa a una serie de servicios
 para enriquecer el universo narrativo ya creado.
 
@@ -117,7 +117,7 @@ Esto aumenta drásticamente la velocidad y eficacia en el proceso de aprendizaje
 
 En el transcurso del año siguiente surgieron los primeros modelos extensos de lenguaje
 que adoptaron la arquitectura de los transformadores.
-Con el lanzamiento de GPT\cite{Radford2018GPT1} por OpenAI y de BERT\cite{Devlin2019BERT} por Google, ambos modelos se convirtieron
+Con el lanzamiento de GPT \cite{Radford2018GPT1} por OpenAI y de BERT \cite{Devlin2019BERT} por Google, ambos modelos se convirtieron
 en los pioneros y pilares fundamentales de los modelos extensos de lenguaje.
 Mientras BERT se especializó en la comprensión del contexto del texto de manera bidireccional, GPT
 fue desarrollado para la generación de texto.
@@ -129,7 +129,7 @@ Además, este desarrollo ha sido transversal y está dotando a los modelos más 
 con la habilidad para generar no solo texto, sino también imágenes, audio e incluso video.
 
 Estos avances están actualmente al alcance del público general a través de internet, con ejemplos destacados
-como ChatGPT\cite{OpenAIChatGPT2022}, Gemini\cite{GeminiTeam2023Gemini} o Meta AI\cite{MetaAIAbout}.
+como ChatGPT \cite{OpenAIChatGPT2022}, Gemini \cite{GeminiTeam2023Gemini} o Meta AI \cite{MetaAIAbout}.
 ChatGPT fue el pionero y el que abarcó mayor popularidad,
 con una interfaz gráfica similar a la de un chat con la que el usuario podía interactuar de forma intuitiva
 y sencilla con el modelo. La utilización de estos modelos se masificó rápidamente y se implementaron variantes
@@ -154,13 +154,13 @@ lo que afecta la precisión de las respuestas y hace que sean menos fiables para
 \item Alucinaciones e inconsistencias a largo plazo:
 persisten las dificultades para mantener la coherencia y consistencia
 en textos extensos debido a la capacidad finita de su memoria (ventana de contexto).
-También existe la posibilidad de que la salida se vuelva incongruente o que se genere información ficticia
+También existe la posibilidad de que la salida se vuelva incongruente o que se genere información ficticia,
 debido a factores internos o a la complejidad de la solicitud.
 \item Sesgos en los datos de entrenamiento: 
 los modelos pueden perpetuar o amplificar prejuicios sociales presentes en los datos con los que fueron entrenados.
 \end{itemize}
 
-Para mitigar estos problemas utilizan las siguientes tecnicas:
+Para mitigar estos problemas se utilizan las siguientes tecnicas:
 \begin{itemize}
 \item Generación aumentada por recuperación:
 esta técnica permite a los modelos consultar fuentes de datos externas 
@@ -170,13 +170,9 @@ Esto reduce las alucinaciones y mejora la verosimilitud de la respuesta.
 \item Filtrado de datos de entrenamiento: 
 se implementan procesos más rigurosos para limpiar y despolarizar los conjuntos de datos de entrenamiento,
 para minimizar la presencia de sesgos.
-\item \textit{Fine-tuning}
-\footnote{La idea de \textit{fine-tuning} se popularizó enormemente con el desarrollo de los modelos de lenguaje pre-entrenados,
-siendo el paper de BERT\cite{Devlin2019BERT} uno de los más influyentes al respecto.}: 
+\item \textit{Fine-tuning} \cite{Devlin2019BERT}: 
 consiste en la adaptación de los modelos a tareas específicas a través de un proceso de reentrenamiento parcial.
-\item \textit{Prompt engineering}
-\footnote{El concepto de \textit{prompt engineering} se hizo fundamentalmente relevante y visible con la publicación del paper de GPT-3\cite{Brown2020GPT3},
-que demostró las capacidades de aprendizaje \textit{few-shot} e \textit{in-context learning} mediante la formulación de instrucciones de texto.}:
+\item \textit{Prompt engineering} \cite{Brown2020GPT3}:
 se basa en la formulación precisa de instrucciones en la entrada para guiar la generación de la respuesta 
 y obtener mejores resultados.
 \end{itemize}
