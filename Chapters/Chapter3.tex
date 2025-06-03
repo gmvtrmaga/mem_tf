@@ -1,8 +1,9 @@
 \chapter{Diseño e implementación} % Main chapter title
-
 \label{Chapter3} % Change X to a consecutive number; for referencing this chapter elsewhere, use \ref{ChapterX}
-
-Todos los capítulos deben comenzar con un breve párrafo introductorio que indique cuál es el contenido que se encontrará al leerlo.  La redacción sobre el contenido de la memoria debe hacerse en presente y todo lo referido al proyecto en pasado, siempre de modo impersonal.
+En este capítulo se detalla cómo se ha ejecutado la implementación del trabajo,
+incluyendo la arquitectura del sistema, procesamiento de peticiones,
+modelos extensos de lenguaje utilizados y las técnicas empleadas sobre la inteligencia artificial.
+Adicionalmente, se incluyen los hallazgos intermedios significativos que fueron fundamentales para la implementación final.
 
 \definecolor{mygreen}{rgb}{0,0.6,0}
 \definecolor{mygray}{rgb}{0.5,0.5,0.5}
@@ -44,51 +45,188 @@ Todos los capítulos deben comenzar con un breve párrafo introductorio que indi
 %----------------------------------------------------------------------------------------
 %	SECTION 1
 %----------------------------------------------------------------------------------------
-\section{Análisis del software}
- 
-La idea de esta sección es resaltar los problemas encontrados, los criterios utilizados y la justificación de las decisiones que se hayan tomado.
+\section{Arquitectura del sistema}
 
-Se puede agregar código o pseudocódigo dentro de un entorno lstlisting con el siguiente código:
+Los primeros esfuerzos en el desarrollo del trabajo se enfocaron en definir el conjunto de módulos que compondrían la solución.
+Estos componentes fueron identificados correctamente desde el principio:
+Un servidor \textit{web} y un módulo de modelos extensos de lenguaje.
+Sin embargo, su relación en el sistema sí cambió durante la fase de implementación.
 
-\begin{verbatim}
-\begin{lstlisting}[caption= "un epígrafe descriptivo"]
-	las líneas de código irían aquí...
-\end{lstlisting}
-\end{verbatim}
+Inicialmente, durante la fase de diseño, se concibió que el servidor \textit{web} también alojaría el modelo extenso de lenguaje 
+y sería responsable de gestionar su conjunto de datos, entrenamiento y despliegue.
+Esta decisión se tomó al principio de la especialización en inteligencia artificial,
+influenciada por la forma en la que se trabaja con modelos más sencillos.
+Hacer que esa arquitectura funcionase en este trabajo era mucho más complejo de lo estimado
+por la propia naturaleza de los modelos extensos de lenguaje.
+La incertidumbre generada por la ausencia de un conjunto de datos de calidad y tamaño suficientes,
+y la dificultad implícita de reentrenar un modelo tan grande,
+fueron un factor de riesgo permanente durante la fase de diseño.
 
-A modo de ejemplo:
+Fue necesario profundizar en las materias de procesamiento de lenguaje natural y \textit{Large Language Models} \cite{fiubaLlm}
+para definir una solución efectiva a este problema.
+Finalmente se decidió por no solo ``extraer'' el módulo de modelos extensos de lenguaje del servidor \textit{web}
+sino por simplificar su complejidad de programación haciendo uso de la herramienta LM Studio.
+Este programa permite administrar los modelos locales de la computadora,
+añadir nuevos a través de una interfaz de descarga
+y hacer uso del hardware disponible para arrancarlos de forma transparente para el usuario.
+Además, cuenta con varias ventanas de configuración de parámetros de lanzamiento del modelo, prompts personalizados,
+salida estructurada a través de un esquema JSON,
+opciones relacionadas con la aleatoriedad y temperatura de la inferencia y otras características experimentales.
 
-\begin{lstlisting}[label=cod:vControl,caption=Pseudocódigo del lazo principal de control.]  % Start your code-block
+De este modo, el servidor \textit{web} también se simplificó en el desarrollo, ahorró mucho trabajo de programación sin
+comprometer la calidad del proceso de la inteligencia artificial.
+Esto también es coherente con la arquitectura de servidor ligero esperable en un prototipo
+y tiene una mejor sinergia con bibliotecas orientadas al despliegue de servidores sencillos.
 
-#define MAX_SENSOR_NUMBER 3
-#define MAX_ALARM_NUMBER  6
-#define MAX_ACTUATOR_NUMBER 6
+Tal y como se muestra en la figura \ref{fig:sist},
+el prototipo es accesible para los clientes a través del protocolo HTTP-REST que expone el servidor.
+Además, durante el desarrollo se implementó una sencilla página \text{web} para realizar peticiones de prueba
+y mostrar la salida de texto obtenida.
 
-uint32_t sensorValue[MAX_SENSOR_NUMBER];		
-FunctionalState alarmControl[MAX_ALARM_NUMBER];	//ENABLE or DISABLE
-state_t alarmState[MAX_ALARM_NUMBER];						//ON or OFF
-state_t actuatorState[MAX_ACTUATOR_NUMBER];			//ON or OFF
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.9\textwidth]{./Figures/Sistema_es.png}
+	\caption{Arquitectura del sistema.}
+	\label{fig:sist}
+\end{figure}
 
-void vControl() {
+Otra ventaja de haber diseñado ambos módulos de forma independiente es que facilita al cliente
+profundizar de forma independiente en los componentes sin comprometer el funcionamiento del resto del sistema.
+Puede decidir si sustituir la implementación de uno u ambos módulos, escalarlos y distribuirlos en distintos entornos
+para ajustarlo a su aplicación para \text{smartphones} y plan de expansión de servicios. 
 
-	initGlobalVariables();
+%----------------------------------------------------------------------------------------
+%	SECTION 2
+%----------------------------------------------------------------------------------------
+\section{Procesamiento de peticiones \textit{web} y ficheros}
+Para la implementación del servidor web se decidió utilizar la biblioteca de FastAPI \cite{fastapi}.
+Es una biblioteca moderna y de alto rendimiento para la construcción de APIs \text{web} en Python,
+diseñada sobre estándares como OpenAPI \cite{openapi} y JSON schema.
+Ofrece una forma rápida y eficiente de desarrollar interfaces REST
+con una sintaxis sencilla y basada en anotaciones.
+Esto permite una validación automática de datos de entrada y generación de documentación.
+Todo esto hace que FastAPI sea una opción ideal para construir microservicios y prototipos rápidos.
+
+El servidor expone dos servicios principales.
+El primero es un \textit{endpoint} de tipo GET que proporciona la página \textit{web} que visualiza la interfaz gráfica del prototipo.
+El otro servicio implementa un método POST para recibir las peticiones de consulta por parte del usuario para su procesamiento
+y reenvío al módulo de inteligencia artificial. 
+
+
+\pagebreak
+\subsection{Procesamiento de peticiones}
+En la figura \ref{fig:flux} se representa el diagrama de flujo correspondiente al manejo de las peticiones entrantes.
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=1\textwidth]{./Figures/flux-diagram.png}
+	\caption{Diagrama de flujo del procesamiento de peticiones.}
+	\label{fig:flux}
+\end{figure}
+
+El proceso comienza cuando el cliente envía una solicitud con los datos de consulta a través de un cliente REST
+\footnote{Esto puede ser a través del formulario proporcionado por el servidor o a través de cualquier otra herramienta como,
+por ejemplo, PostMan.}.
+Tras realizar las comprobaciones iniciales,
+el servidor continúa procesando la información mediante una serie de funciones específicas:
+\begin{itemize}
+\item \texttt{extract\_text\_from\_file}:
+es el proceso encargado de extraer la información textual de los ficheros adjunto
+y formatearlo para que el módulo de modelos extensos de lenguaje sea capaz de interpretarlo.
+En esta función se hace uso de las bibliotecas de cgardet, docx y fitz para la detección del formato y
+su conversión a texto plano.
+\item \texttt{build\_prompt}:
+esta función es la encargada de construir el prompt a partir del texto extraído del fichero
+y las entradas adicionales proporcionadas por el usuario, entre las que se incluyen el idioma de
+la respuesta, el tipo de listado que se solicita y algunas instrucciones adicionales.
+En esta función se emplea la ingeniería de \textit{prompting} que se envía posteriormente al módulo LLM.
+Se detalla más adelante en la sección (FALTA AÑADIR REFERENCIA)
+\item \texttt{clean\_and\_render\_markdown}:
+Esta función se encarga de limpiar la salida y formatearla en código HTML
+a través de la biblioteca markdown para una mejor legibilidad en navegadores web.
+\end{itemize}
+
+Cabe destacar que para la comunicación con el módulo LLM,
+aunque LM Studio ofrece un SDK en Python para interactuar mediante programación,
+se optó por utilizar su interfaz REST.
+La razón es que así el servidor \textit{web} no depende exclusivamente de la biblioteca de LM Studio.
+Al emplear un protocolo de comunicación estándar como REST,
+el servidor web puede interactuar fácilmente con cualquier otro servicio que aloje modelos extensos de lenguaje,
+lo que le da mayor flexibilidad.
+
+\subsection{Interfaz gráfica}
+El servidor también facilita el acceso a una página \textit{web} con la interfaz gráfica del prototipo,
+tal y como se aprecia en la figura \ref{fig:webPage}.
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.8\textwidth]{./Figures/webpage.png}
+	\caption{Interfaz gráfica del prototipo.}
+	\label{fig:webPage}
+\end{figure}
+
+El formulario consta de los siguientes elementos:
+\begin{itemize}
+\item Cuadro de texto:
+este elemento se utiliza para darle las instrucciones específicas a la inteligencia artificial.
+Está pensado para que sea un mensaje breve y conciso que pueda ayudar al usuario a guiar un poco mejor la respuesta.
+Es un parámetro opcional y puede dejarse en blanco.
+\item Idioma de respuesta:
+se trata de un \textit{combobox} que contiene dos opciones: inglés y español.
+El módulo LLM responderá en el idioma seleccionado, independientemente del idioma del fichero de entrada.
+Este elemento se añadió porque algunos modelos presentan comportamientos anómalos si responden en un idioma distinto al inglés.
+\item Tipo de respuesta:
+permite a la inteligencia artificial centrar su respuesta en un aspecto concreto de la narrativa.
+Al estar instruida en devolver listas de elementos, la idea es que el usuario pueda elegir la opción
+específica de la creación de mundos que le interese.
+\item Fichero adjunto:
+es el elemento más importante del formulario.
+El usuario puede agregar un fichero con el contexto narrativo existente
+y enviarlo a la inteligencia artificial para que genere nuevo contenido.
+\end{itemize}
+% En las siguientes secciones se detallan las funciones de cada módulo y el trabajo realizado.
+
+% Se puede agregar código o pseudocódigo dentro de un entorno lstlisting con el siguiente código:
+
+% \begin{verbatim}
+% \begin{lstlisting}[caption= "un epígrafe descriptivo"]
+% 	las líneas de código irían aquí...
+% \end{lstlisting}
+% \end{verbatim}
+
+% A modo de ejemplo:
+
+% \begin{lstlisting}[label=cod:vControl,caption=Pseudocódigo del lazo principal de control.]  % Start your code-block
+
+% #define MAX_SENSOR_NUMBER 3
+% #define MAX_ALARM_NUMBER  6
+% #define MAX_ACTUATOR_NUMBER 6
+
+% uint32_t sensorValue[MAX_SENSOR_NUMBER];		
+% FunctionalState alarmControl[MAX_ALARM_NUMBER];	//ENABLE or DISABLE
+% state_t alarmState[MAX_ALARM_NUMBER];						//ON or OFF
+% state_t actuatorState[MAX_ACTUATOR_NUMBER];			//ON or OFF
+
+% void vControl() {
+
+% 	initGlobalVariables();
 	
-	period = 500 ms;
+% 	period = 500 ms;
 		
-	while(1) {
+% 	while(1) {
 
-		ticks = xTaskGetTickCount();
+% 		ticks = xTaskGetTickCount();
 		
-		updateSensors();
+% 		updateSensors();
 		
-		updateAlarms();
+% 		updateAlarms();
 		
-		controlActuators();
+% 		controlActuators();
 		
-		vTaskDelayUntil(&ticks, period);
-	}
-}
-\end{lstlisting}
+% 		vTaskDelayUntil(&ticks, period);
+% 	}
+% }
+% \end{lstlisting}
 
 
 
