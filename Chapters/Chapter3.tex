@@ -49,13 +49,13 @@ Adicionalmente, se incluyen los hallazgos intermedios significativos que fueron 
 
 Los primeros esfuerzos en el desarrollo del trabajo se enfocaron en definir el conjunto de módulos que compondrían la solución.
 Estos componentes fueron identificados correctamente desde el principio:
-Un servidor \textit{web} y un módulo de modelos extensos de lenguaje.
+un servidor \textit{web} y un módulo de modelos extensos de lenguaje.
 Sin embargo, su relación en el sistema sí cambió durante la fase de implementación.
 
 Inicialmente, durante la fase de diseño, se concibió que el servidor \textit{web} también alojaría el modelo extenso de lenguaje 
 y sería responsable de gestionar su conjunto de datos, entrenamiento y despliegue.
-Esta decisión se tomó al principio de la especialización en inteligencia artificial,
-influenciada por la forma en la que se trabaja con modelos más sencillos.
+Esta decisión se tomó al principio de la implementación,
+influenciada por la forma en la que se trabaja con redes neuronales sencillas.
 Hacer que esa arquitectura funcionase en este trabajo era mucho más complejo de lo estimado
 por la propia naturaleza de los modelos extensos de lenguaje.
 La incertidumbre generada por la ausencia de un conjunto de datos de calidad y tamaño suficientes,
@@ -69,7 +69,7 @@ sino por simplificar su complejidad de programación haciendo uso de la herramie
 Este programa permite administrar los modelos locales de la computadora,
 añadir nuevos a través de una interfaz de descarga
 y hacer uso del hardware disponible para arrancarlos de forma transparente para el usuario.
-Además, cuenta con varias ventanas de configuración de parámetros de lanzamiento del modelo, prompts personalizados,
+Además, cuenta con varias ventanas de configuración de parámetros de lanzamiento del modelo, \textit{prompts} personalizados,
 salida estructurada a través de un esquema JSON,
 opciones relacionadas con la aleatoriedad y temperatura de la inferencia y otras características experimentales.
 
@@ -91,7 +91,7 @@ y mostrar la salida de texto obtenida.
 \end{figure}
 
 Otra ventaja de haber diseñado ambos módulos de forma independiente es que facilita al cliente
-profundizar de forma independiente en los componentes sin comprometer el funcionamiento del resto del sistema.
+profundizar de forma paralela en los componentes sin comprometer el funcionamiento del resto del sistema.
 Puede decidir si sustituir la implementación de uno u ambos módulos, escalarlos y distribuirlos en distintos entornos
 para ajustarlo a su aplicación para \text{smartphones} y plan de expansión de servicios. 
 
@@ -124,9 +124,9 @@ En la figura \ref{fig:flux} se representa el diagrama de flujo correspondiente a
 	\label{fig:flux}
 \end{figure}
 
-El proceso comienza cuando el cliente envía una solicitud con los datos de consulta a través de un cliente REST
-\footnote{Esto puede ser a través del formulario proporcionado por el servidor o a través de cualquier otra herramienta como,
-por ejemplo, PostMan.}.
+El proceso comienza cuando el cliente envía una solicitud con los datos de consulta a través de un cliente REST.
+Esto puede ser a través del formulario proporcionado por el servidor o a través de cualquier otra herramienta como,
+por ejemplo, PostMan.
 Tras realizar las comprobaciones iniciales,
 el servidor continúa procesando la información mediante una serie de funciones específicas:
 \begin{itemize}
@@ -136,13 +136,13 @@ y formatearlo para que el módulo de modelos extensos de lenguaje sea capaz de i
 En esta función se hace uso de las bibliotecas de cgardet, docx y fitz para la detección del formato y
 su conversión a texto plano.
 \item \texttt{build\_prompt}:
-esta función es la encargada de construir el prompt a partir del texto extraído del fichero
+esta función es la encargada de construir el \textit{prompt} a partir del texto extraído del fichero
 y las entradas adicionales proporcionadas por el usuario, entre las que se incluyen el idioma de
 la respuesta, el tipo de listado que se solicita y algunas instrucciones adicionales.
 En esta función se emplea la ingeniería de \textit{prompting} que se envía posteriormente al módulo LLM.
 Se detalla más adelante en la sección (FALTA AÑADIR REFERENCIA)
 \item \texttt{clean\_and\_render\_markdown}:
-Esta función se encarga de limpiar la salida y formatearla en código HTML
+esta función se encarga de limpiar la salida y formatearla en código HTML
 a través de la biblioteca markdown para una mejor legibilidad en navegadores web.
 \end{itemize}
 

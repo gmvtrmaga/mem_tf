@@ -13,7 +13,7 @@ Finalmente, se expone el conjunto de técnicas y herramientas que se han aplicad
 \section{Requerimientos del sistema}
 Para llevar a cabo este trabajo
 se identificaron una serie de requerimientos fundamentales.
-A continuación se listan aquellos que están directamente relacionados con la implementación:
+A continuación, se listan aquellos que están directamente relacionados con la implementación:
 
 \begin{enumerate}
 	\item Requerimientos del servidor:
@@ -67,9 +67,10 @@ Además de su capacidad de paralelización y memoria a largo plazo, los LLM basa
 mediante la predicción de la siguiente cadena de \textit{tokens} a partir del contexto previo.
 En este proceso hay elementos que controlan la generación, entre los que se destaca la temperatura \cite{radford2019language}.
 La temperatura regula la aleatoriedad de los \textit{tokens}: valores bajos tienden a generar respuestas deterministas,
-mientras que valores altos proporcionan respuestas más diversas y creativas\footnote{
-	Esto también aumenta las probabilidades de que esta respuesta sea incoherente, también llamada alucinación.
-}. Existen otros parámetros que controlan la variedad del texto, por ejemplo \textit{top-k} y \textit{top-p} \cite{holtzman2019curious}.
+mientras que valores altos proporcionan respuestas más diversas y creativas.
+Esto también aumenta las probabilidades de que esta respuesta sea incoherente,
+también llamada alucinación \cite{Ji2023SurveyHallucination}.
+Existen otros parámetros que controlan la variedad del texto, por ejemplo \textit{top-k} y \textit{top-p} \cite{holtzman2019curious}.
 
 A medida que los LLM aumentan en extensión de parámetros y profundidad de entrenamiento, empiezan a manifestar cualidades
 que no fueron explícitamente programadas. Entre estas capacidades destacan el razonamiento en múltiples pasos,
@@ -177,13 +178,13 @@ Además, LM Studio facilita la personalización de modelos mediante interfaces a
 lo que la convierte en una opción popular tanto para investigadores como para desarrolladores
 que desean incorporar inteligencia artificial avanzada en sus proyectos.
 
-Para la implementación del \textit{backend} de la aplicación que interactúa con LM Studio, se utilizó \textit{Python},
+Para la implementación del \textit{backend} de la aplicación que interactúa con LM Studio, se utilizó Python,
 un lenguaje de programación ampliamente adoptado en el ámbito de la inteligencia artificial por su simplicidad
 y la gran cantidad de bibliotecas disponibles.
 Se empleó la biblioteca de FastAPI \cite{fastapi} en al construcción del servidor web gracias a su sintaxis intuitiva,
 lo que facilitó la creación de \textit{endpoints} eficientes para la comunicación entre el usuario y el modelo.
 
-Por otro lado, \textit{PyTorch} \cite{pytorch} es la biblioteca de referencia para el desarrollo 
+Por otro lado, PyTorch \cite{pytorch} es la biblioteca de referencia para el desarrollo 
 y entrenamiento de modelos de aprendizaje profundo, incluyendo los LLM.
 Proporciona una interfaz dinámica y flexible que permite tanto el entrenamiento
 como la inferencia eficiente en hardware acelerado, y es compatible con múltiples plataformas.
