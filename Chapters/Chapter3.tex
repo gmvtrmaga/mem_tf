@@ -306,17 +306,17 @@ En la siguiente tabla se especifican los LLM aplicados en el trabajo:
 
 \begin{table}[htbp]
 \centering
-\caption{Modelos extensos de lenguaje utilizados en el estudio}
+\caption{Modelos extensos de lenguaje utilizados en el estudio.}
 \resizebox{\textwidth}{!}{%
-\begin{tabular}{|l|c|c|l|c|c|}
-\hline
+\begin{tabular}{l c c l c r}
+\toprule
 \textbf{Modelo} & \textbf{Arquitectura} & \textbf{Parámetros} & \textbf{Editor} & \textbf{Cuantización} & \textbf{Tamaño} \\
-\hline
-\texttt{liai-rpmax-v1.4} & LLaMA & 24B & bartowski & Q6\_K\_L & 19.67 GB \\
-\texttt{writing-roleplay-v1.0} & LLaMA & 12B & bartowski & Q6\_K\_L & 10.38 GB \\
-\texttt{worldbuilder} & LLaMA & 12B & mrademacher & Q6\_K & 10.06 GB \\
-\texttt{deepseek-r1-distill} & Qwen2 & 7B & lmstudio-community & Q4\_K\_M & 4.68 GB \\
-\hline
+\midrule
+\texttt{liai-rpmax-v1.4} & LLaMA & 24B & bartowski & Q3\_K\_S & 10,40 GB \\
+\texttt{writing-roleplay-v1.0} & LLaMA & 12B & bartowski & Q6\_K\_L & 10,38 GB \\
+\texttt{worldbuilder} & LLaMA & 12B & mrademacher & Q6\_K & 10,06 GB \\
+\texttt{deepseek-r1-distill} & Qwen2 & 7B & lmstudio-community & Q4\_K\_M & 4,68 GB \\
+\bottomrule
 \end{tabular}%
 }
 \label{tab:modelos_llm}
