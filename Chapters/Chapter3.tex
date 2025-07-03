@@ -201,7 +201,7 @@ A su vez, la interacción con servicios externos exponía la información transm
 lo que podría incumplir los requerimientos de protección de la privacidad
 y propiedad intelectual de los datos del cliente.
 También se observó un menor número de modelos disponibles y opciones de personalización,
-lo que dificultaba la experimentación y adaptación de las LLM a las necesidades específicas del sistema.
+lo que dificultaba la experimentación y adaptación de los LLM a las necesidades específicas del sistema.
 
 Por otra parte, la opción de gestionar los modelos extensos de lenguaje
 de forma nativa presentaba desafíos considerables.
@@ -214,7 +214,7 @@ Por estos motivos se decidió buscar alternativas para este módulo y se encontr
 cumplían con las características deseadas, y las más llamativas fueron
 Ollama \cite{ollama}, GPT4All \cite{gpt4all} y LM Studio \cite{lmstudio}.
 Esta última fue la opción elegida eventualmente por su interfaz intuitiva y buscador de modelos,
-además de simplificar la gestión y configuración de las LLM.
+además de simplificar la gestión y configuración de los LLM.
 Alojar localmente los modelos permite el envío ilimitado de consultas
 y cumple con los requisitos de privacidad de los datos del cliente.
 
@@ -236,7 +236,7 @@ Al seleccionar un modelo, se muestra una sección de detalles con sus caracterí
 \end{figure}
 
 Esta herramienta se empleó para la búsqueda y descarga de múltiples modelos,
-que se enumeran y detallan al final de esta sección.
+que se enumeran y detallan en la subsección \ref{subsec:modelos-llm}.
 Se eligieron tanto modelos generalistas como aquellos especializados en \textit{roleplay},
 con el fin de analizar y comparar su rendimiento en tareas de construcción de mundos.
 
@@ -301,71 +301,43 @@ Este diseño permite la misma forma de gestionar las peticiones,
 sin importar el modelo que esté activo.
 
 \pagebreak
-\subsection{Modelos extensos de lenguaje utilizados}
-En la siguiente tabla se especifican los LLM aplicados en el trabajo:
+\subsection{Modelos extensos de lenguaje utilizados}\label{subsec:modelos-llm}
+El conjunto de modelos empleados en este trabajo se obtuvo a través de la herramienta de descarga de LM Studio,
+y fueron seleccionados con un número de parámetros y un nivel de cuantización adecuado,
+sin superar el límite de 12~GB de tamaño en memoria RAM dedicada en la tarjeta gráfica.
+Esta parametrización permite aprovechar al máximo las capacidades del \textit{hardware} disponible,
+con el objetivo de evaluar el rendimiento de distintos LLMs en tareas de generación narrativa.
+En la tabla~\ref{tab:modelos_llm} se detallan las características de cada modelo:
 
-\begin{table}[htbp]
+\begin{table}[h]
 \centering
 \caption{Modelos extensos de lenguaje utilizados en el estudio.}
 \resizebox{\textwidth}{!}{%
-\begin{tabular}{l c c l c r}
+\begin{tabular}{l l c c c r}
 \toprule
-\textbf{Modelo} & \textbf{Arquitectura} & \textbf{Parámetros} & \textbf{Editor} & \textbf{Cuantización} & \textbf{Tamaño} \\
+\textbf{Modelo} & \textbf{Editor} & \textbf{Arquitectura} & \textbf{Parámetros} & \textbf{Cuantización} & \textbf{Tamaño (Contexto / VRAM)} \\
 \midrule
-\texttt{liai-rpmax-v1.4} & LLaMA & 24B & bartowski & Q3\_K\_S & 10,40 GB \\
-\texttt{writing-roleplay-v1.0} & LLaMA & 12B & bartowski & Q6\_K\_L & 10,38 GB \\
-\texttt{worldbuilder} & LLaMA & 12B & mrademacher & Q6\_K & 10,06 GB \\
-\texttt{deepseek-r1-distill} & Qwen2 & 7B & lmstudio-community & Q4\_K\_M & 4,68 GB \\
+\texttt{arliai-rpmax-v1.4} & bartowski & Mistral & 24 B & Q3\_K\_S & 20 k tokens / 10,40 GB \\
+\texttt{writing-roleplay-v1.0} & bartowski & LLaMA & 12 B & Q6\_K\_L & 20 k tokens / 10,38 GB \\
+\texttt{worldbuilder} & mrademacher & LLaMA & 12 B & Q6\_K & 4k tokens / 10,06 GB \\
+\texttt{deepseek-r1-distill} & lmstudio & Qwen2 & 7 B & Q4\_K\_M & 32 k tokens / 4,68 GB \\
+\texttt{mistral-instruct-v0.1} & TheBloke & Mistral & 8 B & Q8\_0 & 20 k tokens /  7,70 GB \\
 \bottomrule
 \end{tabular}%
 }
 \label{tab:modelos_llm}
 \end{table}
 
+Los tres primeros modelos referenciados han fueron \textit{fine-tuneados} específicamente para tareas de \textit{roleplay} y \textit{worldbuilding}.
+Esto permite una mejor comprensión del fichero proporcionado por el usuario y una generación de contenido narrativo más coherente y contextualizado.
 
-% En las siguientes secciones se detallan las funciones de cada módulo y el trabajo realizado.
+Con el fin de evaluar el rendimiento del sistema con las alternativas ampliamente accesibles en línea,
+se incorporaron dos modelos generalistas que actúan como referencia o línea base.
+Dado que estos modelos no han sido entrenados explícitamente para la creación narrativa,
+permite evaluar tanto la eficacia de la ingeniería de \textit{prompting} implementada,
+como el impacto del entrenamiento específico en la capacidad de análisis del contexto y la calidad de las respuestas generadas.
 
-% Se puede agregar código o pseudocódigo dentro de un entorno lstlisting con el siguiente código:
-
-% \begin{verbatim}
-% \begin{lstlisting}[caption= "un epígrafe descriptivo"]
-% 	las líneas de código irían aquí...
-% \end{lstlisting}
-% \end{verbatim}
-
-% A modo de ejemplo:
-
-% \begin{lstlisting}[label=cod:vControl,caption=Pseudocódigo del lazo principal de control.]  % Start your code-block
-
-% #define MAX_SENSOR_NUMBER 3
-% #define MAX_ALARM_NUMBER  6
-% #define MAX_ACTUATOR_NUMBER 6
-
-% uint32_t sensorValue[MAX_SENSOR_NUMBER];		
-% FunctionalState alarmControl[MAX_ALARM_NUMBER];	//ENABLE or DISABLE
-% state_t alarmState[MAX_ALARM_NUMBER];						//ON or OFF
-% state_t actuatorState[MAX_ACTUATOR_NUMBER];			//ON or OFF
-
-% void vControl() {
-
-% 	initGlobalVariables();
-	
-% 	period = 500 ms;
-		
-% 	while(1) {
-
-% 		ticks = xTaskGetTickCount();
-		
-% 		updateSensors();
-		
-% 		updateAlarms();
-		
-% 		controlActuators();
-		
-% 		vTaskDelayUntil(&ticks, period);
-% 	}
-% }
-% \end{lstlisting}
-
-
-
+%----------------------------------------------------------------------------------------
+%	SECTION 4
+%----------------------------------------------------------------------------------------
+\section{Personalización del prompts en función del servicio}
