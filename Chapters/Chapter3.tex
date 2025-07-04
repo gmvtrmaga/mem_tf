@@ -140,7 +140,7 @@ esta función es la encargada de construir el \textit{prompt} a partir del texto
 y las entradas adicionales proporcionadas por el usuario, entre las que se incluyen el idioma de
 la respuesta, el tipo de listado que se solicita y algunas instrucciones adicionales.
 En esta función se emplea la ingeniería de \textit{prompting} que se envía posteriormente al módulo LLM.
-Se detalla más adelante en la sección (FALTA AÑADIR REFERENCIA)
+Se detalla más adelante en la sección \ref{subsec:prompt}.
 \item \texttt{clean\_and\_render\_markdown}:
 esta función se encarga de limpiar la salida y formatearla en código HTML
 a través de la biblioteca markdown para una mejor legibilidad en navegadores web.
@@ -302,8 +302,8 @@ sin importar el modelo que esté activo.
 
 \pagebreak
 \subsection{Modelos extensos de lenguaje utilizados}\label{subsec:modelos-llm}
-El conjunto de modelos empleados en este trabajo se obtuvo a través de la herramienta de descarga de LM Studio,
-y fueron seleccionados con un número de parámetros y un nivel de cuantización adecuado,
+El conjunto de modelos empleados en este trabajo se obtuvo a través de la herramienta de descarga de LM Studio.
+Fueron seleccionados con un número de parámetros y un nivel de cuantización adecuado,
 sin superar el límite de 12~GB de tamaño en memoria RAM dedicada en la tarjeta gráfica.
 Esta parametrización permite aprovechar al máximo las capacidades del \textit{hardware} disponible,
 con el objetivo de evaluar el rendimiento de distintos LLMs en tareas de generación narrativa.
@@ -311,7 +311,7 @@ En la tabla~\ref{tab:modelos_llm} se detallan las características de cada model
 
 \begin{table}[h]
 \centering
-\caption{Modelos extensos de lenguaje utilizados en el estudio.}
+\caption{Modelos extensos de lenguaje utilizados en el trabajo.}
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{l l c c c r}
 \toprule
@@ -328,11 +328,11 @@ En la tabla~\ref{tab:modelos_llm} se detallan las características de cada model
 \label{tab:modelos_llm}
 \end{table}
 
-Los tres primeros modelos referenciados han fueron \textit{fine-tuneados} específicamente para tareas de \textit{roleplay} y \textit{worldbuilding}.
+Los tres primeros modelos referenciados fueron \textit{fine-tuneados} específicamente para tareas de \textit{roleplay} y \textit{worldbuilding}.
 Esto permite una mejor comprensión del fichero proporcionado por el usuario y una generación de contenido narrativo más coherente y contextualizado.
 
 Con el fin de evaluar el rendimiento del sistema con las alternativas ampliamente accesibles en línea,
-se incorporaron dos modelos generalistas que actúan como referencia o línea base.
+se incorporaron dos modelos generalistas que actúan como referencia.
 Dado que estos modelos no han sido entrenados explícitamente para la creación narrativa,
 permite evaluar tanto la eficacia de la ingeniería de \textit{prompting} implementada,
 como el impacto del entrenamiento específico en la capacidad de análisis del contexto y la calidad de las respuestas generadas.
@@ -340,4 +340,143 @@ como el impacto del entrenamiento específico en la capacidad de análisis del c
 %----------------------------------------------------------------------------------------
 %	SECTION 4
 %----------------------------------------------------------------------------------------
-\section{Personalización del prompts en función del servicio}
+\section{Personalización del prompt en función del servicio}
+
+Una de las funcionalidades clave del sistema implementado consiste en la generación de la instrucción
+a partir de la información proporcionada por el usuario en la petición.
+Para guiar de forma efectiva la salida del modelo y obtener respuestas que cumplieran con los requerimientos del cliente,
+se recurrió a diversas técnicas de ingeniería de \textit{prompting}.
+
+\subsection{Función generadora de la instrucción}
+\label{subsec:prompt}
+Para aterrizar la lógica requerida se desarrolló en el módulo de \textit{prompt} la función \textit{build\_prompt}
+y cuyo código se muestra debajo de este párrafo.
+Este método se encarga de construir la instrucción alrededor del contexto narrativo,
+extraído previamente del texto del fichero adjunto,
+y combinarlo de forma estructurada con el resto de elementos de entrada.
+
+\pagebreak
+\begin{lstlisting}[label=cod:prompt,caption=Estructura de la función que construye la instrucción para el modelo.]
+def build_prompt(file_text, additional_instructions, language, response_type):
+    if response_type not in prompts:
+        raise ValueError(
+            f"Invalid output_type: '{response_type}'. Must be one of {list(prompts.keys())}"
+        )
+
+    general_prompt = prompts["general"]
+    specific_prompt = prompts[response_type]
+
+    content = (
+        f"{general_prompt}\n"
+        f"=== ATTACHED TEXT FILE ===\n"
+        f"{file_text}\n\n"
+        f"=== ADDITIONAL INSTRUCTIONS ===\n"
+        f"{additional_instructions}"
+        f"======\n"
+        f"{specific_prompt}\n\n"
+        f"Answer only in {language}.\n\n"
+    )
+
+    return {"role": "user", "content": content}
+
+\end{lstlisting}
+
+A continuación, se definen los elementos principales en orden secuencial:
+\begin{itemize}
+\item \textit{response\_type}:
+tipo de salida esperada por parte del modelo.
+Este parámetro selecciona el \textit{prompt} específico dentro del conjunto de \textit{prompts}
+y si el valor proporcionado no se encuentra definido en dicho conjunto, se lanza una excepción.
+\item \textit{general\_prompt}:
+fragmento introductorio de la instrucción, común para todos los tipos de respuesta, que establece el rol
+y las directrices principales que tiene que seguir el modelo.
+\item \textit{specific\_prompt}:
+instrucción particular asociada al tipo de respuesta especificado en \texttt{response\_type}.
+Complementa a la instrucción principal añadiendo detalles o restricciones más concretas,
+adaptadas a la tarea específica que debe realizar el modelo.
+\item \textit{file\_text}:
+contenido del archivo de entrada con el contexto narrativo sobre el cual se construye
+la instrucción que es enviada al modelo.
+\item \textit{additional\_instructions}:
+conjunto de instrucciones adicionales proporcionadas por el usuario.
+Estas indicaciones permiten personalizar o enriquecer el comportamiento del modelo
+y ajustar la respuesta a necesidades específicas.
+\item \textit{language}:
+idioma en el que debe responder el modelo.
+Esta indicación se incluye al final del mensaje para garantizar que
+la salida esté redactada exclusivamente en el idioma solicitado.
+\end{itemize}
+
+Esta implementación permite personalizar la instrucción de manera precisa según la categoría de respuesta
+y otras variables contextuales.
+Gracias a este enfoque estructurado, basado en la técnica de \textit{prompt chaining},
+se reduce significativamente la complejidad de la interacción entre el usuario y el modelo de lenguaje.
+Además garantiza una respuesta precisa sin necesidad de que el usuario, 
+que previsiblemente utilizará el servicio desde un dispositivo con pantalla reducida,
+posea conocimientos en ingeniería de \textit{prompting}.
+
+\subsection{Refinado iterativo de las instrucciones}
+Una vez se definió la estructura general del mensaje, el siguiente paso consistió en optimizar tanto la instrucción general
+como las indicaciones específicas asociadas a cada elemento de la ambientación narrativa. 
+Este proceso fue esencial para garantizar que las respuestas generadas por los modelos se alinearan con las
+expectativas propias de un asistente creativo que proporcionara listas de nuevas ideas.
+
+El refinamiento se llevó a cabo de forma iterativa, a través de prueba y error con múltiples variantes para las instrucciones.
+En cada ciclo se evaluaron las respuestas del modelo en función tanto de la estructura del contenido como de su coherencia
+con el contexto narrativo aportado.
+Esto permitió identificar errores en la formulación del \textit{prompt} responsables de alucinaciones,
+repeticiones de información y otras inconsistencias en la generación de texto de los modelos.
+En función del reto encontrado, se analizó la forma de solucionarlo mediante el empleo de técnicas
+entre las que se encuentran \textit{chain of thought}, \textit{instruction-based prompting},
+\textit{constrained-output prompting} y \textit{negative prompting}.
+
+El refinado de la instrucción general se centró
+en resolver los problemas comunes detectados en todas las categorías narrativas.
+En versiones iniciales, el modelo no generaba listas de forma adecuada ni mantenía un formato consistente en la respuesta.
+También mostró dificultades para distinguir entre el contexto narrativo y las instrucciones que debía seguir.
+Esto derivaba en repeticiones de información ya presentes en el texto de referencia, lo que limitaba considerablemente
+la originalidad y riqueza de sus propuestas.
+Por estas razones, fue necesario reformular la instrucción general con mayor precisión,
+incorporando directrices explícitas sobre el objetivo del modelo, el formato de salida
+y la distinción entre contexto e instrucciones.
+Se establecieron requisitos claros sobre la longitud mínima de las listas,
+el nivel de detalle esperado en cada punto y la obligatoriedad de que todos los elementos fueran completamente nuevos.
+
+El refinamiento de la instrucción específica para eventos se centró en guiar al modelo
+hacia la generación de sucesos nuevos que enriquecieran el desarrollo del mundo narrativo
+sin duplicar hechos ya mencionados en el texto base.
+En versiones preliminares, el modelo tendía a reformular eventos existentes en lugar de inventar situaciones originales.
+Esto es debido al fuerte entrenamiento de los modelos a no modificar hechos que se consideran históricos.
+Para resolver esto, se eliminó la palabra ``histórico'' de la instrucción y
+se reforzó la indicación de que los eventos debían ser completamente inéditos
+y conectados de forma coherente con el contexto.
+
+En cuanto a los personajes, las versiones iniciales del \textit{prompt} no ofrecían suficientes indicaciones estructurales,
+lo que resultaba en respuestas incompletas o poco claras.
+Algunos personajes carecían de nombre, contexto o motivación dentro del mundo ficticio.
+Para solventar esto, la instrucción fue reescrita para exigir explícitamente un nombre, apellido,
+alias (si procede) y una explicación clara de la relación del personaje con la historia o el entorno.
+
+La instrucción específica para geografía fue afinada
+para evitar confusiones entre elementos naturales y construcciones humanas.
+En iteraciones anteriores, el modelo a menudo mezclaba ríos o montañas con ciudades o estructuras artificiales,
+y no siempre justificaba la relevancia geográfica de los elementos descritos.
+Para corregir esto, se incorporó una aclaración sobre el tipo de elementos geográficos aceptados
+y se exigió una descripción detallada de cada punto, así como su importancia ecológica,
+simbólica o estratégica dentro del mundo narrativo. 
+
+Finalmente, el ajuste de la instrucción para localizaciones buscó mejorar la claridad y
+especificidad de los núcleos poblacionales propuestos.
+En las versiones previas, el modelo a menudo confundía localizaciones con elementos geográficos
+o entregaba descripciones genéricas sin conexión con el resto del mundo.
+La nueva versión de la instrucción estableció que debían generarse únicamente poblaciones (ciudades, pueblos, países)
+y que cada una debía incluir una descripción detallada de sus características culturales, políticas o históricas,
+así como su función o importancia dentro del contexto narrativo. 
+
+Se puede consultar la versión final de las instrucciones desarrolladas en este trabajo en el Anexo (FALTA REFERENCIA).
+Dado que el inglés es el idioma preferente de los modelos,
+las instrucciones se redactaron en ese idioma.
+Por esto mismo, se incluye una instrucción final para que la respuesta se genere en el idioma seleccionado por el usuario.
+Sin embargo, es importante señalar que no todos los modelos soportan el español,
+lo que ocasionalmente lleva a que esta última instrucción sea ignorada.
+Este fenómeno se detallará en la siguiente sección.
