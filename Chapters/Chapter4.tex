@@ -3,13 +3,127 @@
 \chapter{Ensayos y resultados} % Main chapter title
 
 \label{Chapter4} % Change X to a consecutive number; for referencing this chapter elsewhere, use \ref{ChapterX}
-Todos los capítulos deben comenzar con un breve párrafo introductorio que indique cuál es el contenido que se encontrará al leerlo.  La redacción sobre el contenido de la memoria debe hacerse en presente y todo lo referido al proyecto en pasado, siempre de modo impersonal.
+En este capítulo se describe el conjunto de ensayos realizadas sobre el sistema y se recopilan sus resultados.
+Con este propósito, se explican las características del \textit{hardware} y el banco de pruebas que se emplearon.
+Además, se explica cuáles son los criterios de evaluación para determinar la calidad de las respuestas de los
+modelos extensos de lenguaje.
+Finalmente, se hace un análisis global de los resultados, destacando el grado de mejora que ofrece el sistema así como
+sus errores más comunes.
 
 %----------------------------------------------------------------------------------------
 %	SECTION 1
 %----------------------------------------------------------------------------------------
 
-\section{Pruebas funcionales del hardware}
-\label{sec:pruebasHW}
+\section{Entorno y banco de pruebas}
+Los ensayos fueron ejecutados en un equipo de altas prestaciones, orientado a tareas de cómputo intensivo y procesamiento de modelos de lenguaje de gran tamaño.
+Sus especificaciones son las siguientes:
+\begin{itemize}
+\item Memoria RAM: 64 GB.
+\item Tarjeta gráfica: NVIDIA GeForce RTX4080 SUPER, con 16 GB de memoria RAM dedicada.
+\item Procesador: AMD Ryzen9 7950X3D 16-Core.
+\item Sistema Operativo: Windows 11.
+\end{itemize}
 
-La idea de esta sección es explicar cómo se hicieron los ensayos, qué resultados se obtuvieron y analizarlos.
+Aunque se emplearon diversos \textit{worldbuildings} en el proceso iterativo de refinamiento de las instrucciones,
+el contexto narrativo de prueba se basó exclusivamente en textos pertenecientes al mundo de ficción ``Aanrah'',
+desarrollado por el autor Necrowmancer en la plataforma de WorldAnvil \cite{aanrah2024}.
+Esta ambientación fue seleccionada por ofrecer una combinación equilibrada de complejidad conceptual,
+léxico específico y coherencia interna, sin alcanzar un volumen excesivo de contenido.
+Dicha elección refleja el tipo de entradas que previsiblemente introducirán los usuarios del sistema,
+al tiempo que plantea un desafío suficientemente realista para los modelos extensos de lenguaje.
+El corpus de referencia se encuentra detallado en el Anexo(FALTA REFERENCIA).
+
+%----------------------------------------------------------------------------------------
+%	SECTION 2
+%----------------------------------------------------------------------------------------
+
+\section{Pruebas de procesamiento de ficheros}
+Para comprobar el funcionamiento del procesamiento de los ficheros sin depender del módulo de procesamiento de peticiones \textit{web},
+se implementaron varias celdas en un \textit{notebook} de Jupyter.
+Esta solución no solo permite evaluar de forma controlada el comportamiento del módulo,
+sino que además cumple con los criterios de pruebas automatizadas exigidos por el cliente.
+
+Además, se formateó el contexto narrativo de prueba en los tres tipos de fichero aceptados: txt, docx y pdf.
+El funcionamiento del módulo quedó validado tras comprobar que el texto extraído de todos los ficheros es idéntico,
+tal y como se muestran en las figuras \ref{fig:txt-read-test}, \ref{fig:docx-read-test} y \ref{fig:pdf-read-test}.
+Se aprecian diferencias de formato en el archivo pdf, pero su contenido coincide.
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.9\textwidth]{./Figures/file-read-test-txt.png}
+	\caption{Prueba de lectura de ficheros txt.}
+	\label{fig:txt-read-test}
+\end{figure}
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.9\textwidth]{./Figures/file-read-test-docx.png}
+	\caption{Prueba de lectura de ficheros docx.}
+	\label{fig:docx-read-test}
+\end{figure}
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.9\textwidth]{./Figures/file-read-test-pdf.png}
+	\caption{Prueba de lectura de ficheros pdf.}
+	\label{fig:pdf-read-test}
+\end{figure}
+
+%----------------------------------------------------------------------------------------
+%	SECTION 3
+%----------------------------------------------------------------------------------------
+\pagebreak
+\section{Pruebas de procesamiento de peticiones web}
+Durante la fase de implementación se llevaron a cabo pruebas incrementales que incluyeron
+la verificación de la correcta carga del HTML, la recepción de las peticiones junto con los archivos adjuntos,
+la lectura del contenido y, finalmente,
+la integración completa del flujo de comunicación entre el usuario y el modelo extenso de lenguaje.
+Cuando una petición se procesa correctamente, la información se envía de vuelta a la interfaz \textit{web},
+donde se muestra en un cuadro de texto.
+
+En la figura~\ref{fig:web-test} se muestra el resultado de una petición en la que,
+con fines de prueba, se omitió el envío al módulo LLM
+y en su lugar se devolvió directamente al usuario el contenido del fichero adjunto.
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=1\textwidth]{./Figures/web-test.png}
+	\caption{Prueba de envío de peticiones REST.}
+	\label{fig:web-test}
+\end{figure}
+
+En las pruebas de los siguientes apartados se muestran múltiples figuras de la interfaz con el flujo completo de datos.
+
+%----------------------------------------------------------------------------------------
+%	SECTION 4
+%----------------------------------------------------------------------------------------
+\section{Método para valorar la salida de los modelos extensos de lenguaje}
+En este apartado se explica la lógica que se siguió para valorar la calidad de las respuestas
+generadas por el modelo de lenguaje.
+Este proceso presenta una dificultad inherente:
+debido a la naturaleza de los casos de uso del sistema, esta puntuación es completamente subjetiva.
+Conceptos como “adecuación”, “originalidad” o “interés narrativo” no pueden medirse de forma objetiva ni automática,
+lo que limita la posibilidad de una evaluación completamente reproducible.
+Por ello, la validación fue realizada de forma manual, basándose en mi propio criterio como desarrollador del sistema.
+
+Una vez aclarado este aspecto, las pruebas se estructuraron de forma que pudieran reproducirse de manera sencilla y sistemática.
+En todas las evaluaciones se emplea el mismo fichero adjunto, que contiene el contexto narrativo base,
+y se combina con cada tipo de elemento de \textit{worldbuilding} que se desea generar.
+Este enfoque se aplica de forma consistente a todos los modelos extensos de lenguaje.
+Adicionalmente, sobre este mismo conjunto de pruebas se compararán dos escenarios:
+uno en el que se utiliza la ingeniería de \textit{prompting} desarrollada en este trabajo,
+y otro en el que dicha técnica no se aplica.
+Este constraste permitirá evaluar el impacto real de las instrucciones en la calidad de las respuestas.
+
+Para valorar la salida del modelo se emplearon los siguientes criterios:
+\begin{itemize}
+\item \textbf{Adecuación contextual}: se verifica que los elementos generados respeten el tono, estilo y detalles del contexto narrativo original.
+\item \textbf{Pertinencia temática}: los resultados deben estar alineados con la categoría seleccionada
+(por ejemplo, si se ha elegido "personajes", la salida no debe incluir ubicaciones o eventos).
+\item \textbf{Originalidad}: se valora la capacidad del modelo para proponer ideas nuevas sin repetir explícitamente el contenido del fichero.
+\item \textbf{Diversidad}: se analiza si la lista contiene variedad en las propuestas y evita repeticiones o elementos demasiado similares.
+\item \textbf{Idioma}: se indica si el modelo acepta texto en español. 
+\item \textbf{Consistencia}: analiza la inestabilidad en la respuesta de los modelos,
+teniendo en cuenta que todos fueron configurados con una temperatura de 0,7 sobre 1. 
+\item \textbf{Errores}: se listan los errores encontrados en las pruebas y se analiza el impacto que tienen.
+\end{itemize}
