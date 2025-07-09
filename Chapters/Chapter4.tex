@@ -113,7 +113,8 @@ Este enfoque se aplica de forma consistente a todos los modelos extensos de leng
 Adicionalmente, sobre este mismo conjunto de pruebas se compararán dos escenarios:
 uno en el que se utiliza la ingeniería de \textit{prompting} desarrollada en este trabajo,
 y otro en el que dicha técnica no se aplica.
-Este constraste permitirá evaluar el impacto real de las instrucciones en la calidad de las respuestas.
+Este constraste permitirá evaluar el impacto real de las instrucciones
+refinadas sobre los modelos.
 
 Para valorar la salida del modelo se emplearon los siguientes criterios:
 \begin{itemize}
@@ -188,6 +189,50 @@ como ciudades de Estados Unidos, personajes históricos o festividades internaci
 %	SECTION 6
 %----------------------------------------------------------------------------------------
 \section{Pruebas con modelos reentrenados y prompting poco preciso}
-Análogamente a la sección anterior, se realizan las mismas pruebas sobre los modelos
-\textit{fine-tuneados}
+Análogamente a la sección anterior, se llevaron a cabo pruebas equivalentes
+sobre los modelos \textit{fine-tuneados} con el fin de evaluar su rendimiento.
+Los resultados permiten establecer una comparación entre estos LLM
+y los modelos generalistas.
 
+El modelo de \textit{writing-roleplay} funcionó correctamente en la generación de eventos,
+comprendiendo adecuadamente el contexto y ofreciendo ideas interesantes.
+Sin embargo, presentó problemas en el resto de elementos narrativos.
+A pesar de que aporta una variedad aceptable y una ambientación de fantasía correcta,
+su respuesta se ajusta más a un contenido predefinido que a algo adaptado a la ambientación
+narrativa del fichero adjunto.
+Finalmente, fue notoria la inconsistencia del modelo a la temperatura a la que fue configurado,
+ya que ocasionalmente repetía información en vez de aportar ideas nuevas.
+
+En el caso de \textit{worldbuilder},
+su comprensión de la entrada destacó sobre las alternativas generalistas,
+aportando ideas con una relación profunda con el contexto de entrada
+(Figura \ref{fig:worldbuilder-settle}).
+Sin embargo, el modelo también tiene una sensibilidad alta de temperatura
+y ocasionalmente puede ignorar la ambientación al generar nuevo contenido.
+Algo único de este LLM es que puede llegar a dar consejos al usuario de cómo
+hacer la construccion de mundos, con diversas técnicas y explicaciones,
+en vez de dar una lista de nuevas ideas.
+También es el único que no puede dar respuestas en español.
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=1\textwidth]{./Figures/worldbuilder-noprompt-settlements.png}
+	\caption{Resultado de worldbuilder para asentamientos}
+	\label{fig:worldbuilder-settle}
+\end{figure}
+
+Finalmente, el modelo \textit{arliai-rpmax} fue el que mejor desempeño demostró. 
+Se ajustó al contexto de entrada y profundizó en las respuestas de forma aceptable.
+Donde también destacó es en la capacidad de generar texto en español sin verse afectado
+en la calidad del mensaje. 
+
+A nivel global, todos los LLM funcionaron bien para los eventos y las localizaciones
+mientras que carecieron de originalidad en la generación de personajes y geografía.
+En la figura \ref{fig:rpmax-chars} se muestra un ejemplo de este fenómeno.
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=1\textwidth]{./Figures/rpmax-noprompt-chars.png}
+	\caption{Resultado de arliai-rpmax para personajes}
+	\label{fig:rpmax-chars}
+\end{figure}
