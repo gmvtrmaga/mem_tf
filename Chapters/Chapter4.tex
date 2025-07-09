@@ -119,7 +119,7 @@ Para valorar la salida del modelo se emplearon los siguientes criterios:
 \begin{itemize}
 \item \textbf{Adecuación contextual}: se verifica que los elementos generados respeten el tono, estilo y detalles del contexto narrativo original.
 \item \textbf{Pertinencia temática}: los resultados deben estar alineados con la categoría seleccionada
-(por ejemplo, si se ha elegido "personajes", la salida no debe incluir ubicaciones o eventos).
+(por ejemplo, si se ha elegido ``personajes'', la salida no debe incluir ubicaciones o eventos).
 \item \textbf{Originalidad}: se valora la capacidad del modelo para proponer ideas nuevas sin repetir explícitamente el contenido del fichero.
 \item \textbf{Diversidad}: se analiza si la lista contiene variedad en las propuestas y evita repeticiones o elementos demasiado similares.
 \item \textbf{Idioma}: se indica si el modelo acepta texto en español. 
@@ -127,3 +127,67 @@ Para valorar la salida del modelo se emplearon los siguientes criterios:
 teniendo en cuenta que todos fueron configurados con una temperatura de 0,7 sobre 1. 
 \item \textbf{Errores}: se listan los errores encontrados en las pruebas y se analiza el impacto que tienen.
 \end{itemize}
+
+%----------------------------------------------------------------------------------------
+%	SECTION 5
+%----------------------------------------------------------------------------------------
+\section{Pruebas con modelos generalistas y prompting poco preciso}
+Esta sección analiza el rendimiento de los modelos que no han sido ajustados específicamente
+para tareas de ambientación narrativa y que carecen de un refinamiento adecuado en las instrucciones.
+El objetivo es simular los resultados que podrían obtenerse si una persona sin experiencia en ingeniería de
+\textit{prompting} utilizara las opciones más comunes disponibles en línea.
+
+Para lograr esto, se desactivó el módulo de \textit{prompts} y se bloquearon algunos controles de la interfaz
+\textit{web} para que solo aceptara el fichero adjunto, el cuadro de texto y el selector de idiomas.
+En la figura \ref{fig:prompt-test} se muestra
+como el modelo responde libremente a la entrada del usuario.
+Una vez validada la funcionalidad, todas las instrucciones se simplificaron en una única frase:
+``dame una lista de diez nuevos'' seguido del elemento narrativo que se quería obtener.
+\pagebreak
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=1\textwidth]{./Figures/promp-testing.png}
+	\caption{Prueba de desconexión del módulo generador de instrucciones.}
+	\label{fig:prompt-test}
+\end{figure}
+
+En el caso de \textit{deepseek}, presentó una adaptación al contexto narrativo aceptable y se ciñó correctamente al
+tipo de elemento narrativo que se especificó.
+No obstante, su desempeño en relación a la variedad de las ideas fue baja al presentar puntos muy similares entre sí.
+Este problema fue especialmente notable en el caso de los personajes y eventos.
+Por último, la consistencia de sus respuestas varió en ocasiones.
+Esto significa que su sensibilidad a la temperatura es bastante alta.
+El modelo puede responder en español pero los errores de traduccion y alucinaciones son frecuentes,
+tal y como se muestra en la figura \ref{fig:deepseek-esp}:
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=1\textwidth]{./Figures/deepseek-noprompt-spanish.png}
+	\caption{Resultado en español de deepseek para eventos.}
+	\label{fig:deepseek-esp}
+\end{figure}
+\pagebreak
+El modelo generalista de \textit{mistral} no consiguió la misma calidad en sus respuestas.
+Las propuestas, aunque tienen relación con el contexto de la historia,
+es una conexión sin demasiada profundidad en los detalles ni en su variedad.
+En los casos de geografía y asentamientos, su relacion con el contexto es mínima o nula
+(ver figura \ref{fig:mistral-geo}), lo que sugiere que su entrenamiento no le permite ser
+flexible en la generación de contenido narrativo sin instrucciones previas.
+Este modelo pierde completamente el contexto al responder en español,
+lo que provoca que utilice referencias reales,
+como ciudades de Estados Unidos, personajes históricos o festividades internacionales.
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=1\textwidth]{./Figures/mistral-noprompt-geography.png}
+	\caption{Resultado de mistral para geografía}
+	\label{fig:mistral-geo}
+\end{figure}
+
+%----------------------------------------------------------------------------------------
+%	SECTION 6
+%----------------------------------------------------------------------------------------
+\section{Pruebas con modelos reentrenados y prompting poco preciso}
+Análogamente a la sección anterior, se realizan las mismas pruebas sobre los modelos
+\textit{fine-tuneados}
+
