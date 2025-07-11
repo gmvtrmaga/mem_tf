@@ -361,3 +361,88 @@ en la ambientación narrativa mpleada en los ensayos.
 %	SECTION 9
 %----------------------------------------------------------------------------------------
 \section{Interpretación de resultados}
+Previo al análisis global del rendimiento del sistema,
+se han confeccionado dos grillas resumen que muestra cómo ha funcionado
+cada combinación de modelo y estrategia de instrucciones a lo largo de la experimentación.
+En ella, cada celda contiene una valoración del 1 al 5,
+donde 1 indica un desempeño insuficiente y 5 refleja una ejecución excelente.
+Esta síntesis numérica de las tablas \ref{tab:results-noprompt} y \ref{tab:results-prompt}
+permite identificar patrones de mejora derivados
+de intervenciones específicas, como la optimización de los \textit{prompts},
+y facilita una evaluación comparativa entre configuraciones.
+ 
+\begin{table}[h]
+\centering
+\caption{Tabla resumen de los ensayos con \textit{prompting} poco preciso.}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{l c c c c c c c c}
+\toprule
+\textbf{Modelo} & \textbf{Eventos} & \textbf{Personajes} & \textbf{Geografía} & \textbf{Localizaciones} & \textbf{Contexto} & \textbf{Temática} & \textbf{Originalidad} & \textbf{Consistencia} \\
+\midrule
+\texttt{deepseek} & 3 & 2 & 3 & 3 & 3 & 4 & 3 & 2 \\
+\texttt{mistral} & 1 & 2 & 3 & 3 & 2 & 3 & 2 & 4 \\
+\texttt{writing-roleplay} & 3 & 2 & 3 & 3 & 2 & 4 & 3 & 3 \\
+\texttt{worldbuilder} & 4 & 3 & 3 & 3 & 3 & 4 & 4 & 3 \\
+\texttt{arliai-rpmax} & 4 & 4 & 3 & 3 & 3 & 4 & 3 & 3 \\
+\bottomrule
+\end{tabular}%
+}
+\label{tab:results-noprompt}
+\end{table}
+
+\begin{table}[h]
+\centering
+\caption{Tabla resumen de los ensayos con \textit{prompting} preciso.}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{l c c c c c c c c}
+\toprule
+\textbf{Modelo} & \textbf{Eventos} & \textbf{Personajes} & \textbf{Geografía} & \textbf{Localizaciones} & \textbf{Contexto} & \textbf{Temática} & \textbf{Originalidad} & \textbf{Consistencia} \\
+\midrule
+\texttt{deepseek} & 4 & 3 & 4 & 3 & 4 & 3 & 4 & 3 \\
+\texttt{mistral} & 2 & 2 & 3 & 3 & 3 & 3 & 3 & 2 \\
+\texttt{writing-roleplay} & 4 & 3 & 2 & 2 & 3 & 3 & 3 & 2 \\
+\texttt{worldbuilder} & 4 & 4 & 3 & 3 & 4 & 4 & 4 & 3 \\
+\texttt{arliai-rpmax} & \textbf{5} & 4 & 3 & 3 & 4 & 4 & 4 & 4 \\
+\bottomrule
+\end{tabular}%
+}
+\label{tab:results-prompt}
+\end{table}
+
+\pagebreak
+Teniendo en cuenta las puntuaciones, se pueden sacar las siguientes conclusiones:
+
+\begin{itemize}
+\item Los modelos generalistas tienen un rendimiento menor que aquellos LLM
+	  que han sido reentrenados para la generación de contenido narrativo.
+\item Es muy importante realizar una configuración de temperatura específica
+      en cada modelo para limitar la aleatoriedad de la estructura de las respuestas.
+\item Todos los modelos presentaron rigidez en la creación de algunos elementos narrativos
+      posiblemente por requerir un mayor nivel de creatividad o por no tener suficiente contexto previo.
+\item La estrategia de instrucciones desarrollada mejora notablemente la capacidad de profundizar en El
+      contexto de entrada y plasmarlo en la salida a costa de aumentar su inestabilidad en algunos casos.
+\end{itemize}
+
+Durante las pruebas se econtraron los siguientes errores con una frecuencia o gravedad considerables:
+\begin{itemize}
+\item Error de formato:
+	  aunque no se trata de un problema con un impacto notable,
+	  el formato de la salida de texto variaba en cada ejecución.
+	  A veces empleaba listas de puntos, otras veces listas numeradas y, en raras ocasiones,
+	  ignoró el formato y lo separó en párrafos.
+	  Se estudió la posibilidad de forzar la salida de forma estructurada, pero los modelos no
+	  respondieron positivamente al cambio por lo que se concluyó que se implementará en trabajos futuros.
+\item Tendencia de los LLM de generar preámbulo y resumen final:
+      relacionado con el punto anterior,
+	  algunos modelos tenían la tendencia de añadir información adicional alrededor de la lista de ideas.
+	  En muchos de los casos, parafraseando las instrucciones recibidas por el módulo de instrucciones.
+\item Errores de traducción: la mayoría de los modelos empeoraron su rendimiento al forzar su salida de 
+      texto en español. Esto puede mitigarse integrando un modelo encoder especializado en traducción
+	  que actúe como etapa previa y posterior al modelo generador.
+\item Procesamiento ``infinito'' de las peticiones:
+      aunque ocurrió en contadas ocasiones, este fenómeno provocaba que los modelos se quedaran
+	  generando un texto demasiado largo, lo que provocaba que su tiempo de respuesta aumente
+	  de unos pocos segundos a varios minutos, dando a entender que el sistema se había quedado bloqueado.
+	  Este problema se puede mitigar mostrando este proceso de acumulación de palabras en tiempo real
+	  o forzando su finalización tras alcanzar un tiempo o extensión configurable.
+\end{itemize}
