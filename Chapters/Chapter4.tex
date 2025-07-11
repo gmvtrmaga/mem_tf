@@ -3,11 +3,11 @@
 \chapter{Ensayos y resultados} % Main chapter title
 
 \label{Chapter4} % Change X to a consecutive number; for referencing this chapter elsewhere, use \ref{ChapterX}
-En este capítulo se describe el conjunto de ensayos realizadas sobre el sistema y se recopilan sus resultados.
+En este capítulo se describe el conjunto de ensayos realizados sobre el sistema y se recopilan sus resultados.
 Con este propósito, se explican las características del \textit{hardware} y el banco de pruebas que se emplearon.
-Además, se explica cuáles son los criterios de evaluación para determinar la calidad de las respuestas de los
+Además, se explican los criterios de evaluación para determinar la calidad de las respuestas de los
 modelos extensos de lenguaje.
-Finalmente, se hace un análisis global de los resultados, destacando el grado de mejora que ofrece el sistema así como
+Finalmente, se hace un análisis global de los resultados, destacando el grado de mejora que ofrece el sistema, así como
 sus errores más comunes.
 
 %----------------------------------------------------------------------------------------
@@ -45,7 +45,7 @@ sino que además cumple con los criterios de pruebas automatizadas exigidos por 
 
 Además, se formateó el contexto narrativo de prueba en los tres tipos de fichero aceptados: txt, docx y pdf.
 El funcionamiento del módulo quedó validado tras comprobar que el texto extraído de todos los ficheros es idéntico,
-tal y como se muestran en las figuras \ref{fig:txt-read-test}, \ref{fig:docx-read-test} y \ref{fig:pdf-read-test}.
+tal y como se muestra en las figuras \ref{fig:txt-read-test}, \ref{fig:docx-read-test} y \ref{fig:pdf-read-test}.
 Se aprecian diferencias de formato en el archivo pdf, pero su contenido coincide.
 
 \begin{figure}[htbp]
@@ -113,7 +113,7 @@ Este enfoque se aplica de forma consistente a todos los modelos extensos de leng
 Adicionalmente, sobre este mismo conjunto de pruebas se compararán dos escenarios:
 uno en el que se utiliza la ingeniería de \textit{prompting} desarrollada en este trabajo,
 y otro en el que dicha técnica no se aplica.
-Este constraste permitirá evaluar el impacto real de las instrucciones
+Este contraste permitirá evaluar el impacto real de las instrucciones
 refinadas sobre los modelos.
 
 Para valorar la salida del modelo se emplearon los siguientes criterios:
@@ -141,7 +141,7 @@ El objetivo es simular los resultados que podrían obtenerse si una persona sin 
 Para lograr esto, se desactivó el módulo de \textit{prompts} y se bloquearon algunos controles de la interfaz
 \textit{web} para que solo aceptara el fichero adjunto, el cuadro de texto y el selector de idiomas.
 En la figura \ref{fig:prompt-test} se muestra
-como el modelo responde libremente a la entrada del usuario.
+cómo el modelo responde libremente a la entrada del usuario.
 Una vez validada la funcionalidad, todas las instrucciones se simplificaron en una única frase:
 ``dame una lista de diez nuevos'' seguido del elemento narrativo que se quería obtener.
 \pagebreak
@@ -155,11 +155,11 @@ Una vez validada la funcionalidad, todas las instrucciones se simplificaron en u
 \subsection{Resultados de \textit{deepseek}}
 En el caso de \textit{deepseek}, presentó una adaptación al contexto narrativo aceptable y se ciñó correctamente al
 tipo de elemento narrativo que se especificó.
-No obstante, su desempeño en relación a la variedad de las ideas fue baja al presentar puntos muy similares entre sí.
+No obstante, su desempeño en relación con la variedad de las ideas fue bajo al presentar puntos muy similares entre sí.
 Este problema fue especialmente notable en el caso de los personajes y eventos.
 Por último, la consistencia de sus respuestas varió en ocasiones.
 Esto significa que su sensibilidad a la temperatura es bastante alta.
-El modelo puede responder en español pero los errores de traduccion y alucinaciones son frecuentes,
+El modelo puede responder en español, pero los errores de traducción y alucinaciones son frecuentes,
 tal y como se muestra en la figura \ref{fig:deepseek-esp}:
 
 \begin{figure}[htbp]
@@ -172,8 +172,8 @@ tal y como se muestra en la figura \ref{fig:deepseek-esp}:
 \subsection{Resultados de \textit{mistral}}
 El modelo generalista de \textit{mistral} no consiguió la misma calidad en sus respuestas.
 Las propuestas, aunque tienen relación con el contexto de la historia,
-es una conexión sin demasiada profundidad en los detalles ni en su variedad.
-En los casos de geografía y asentamientos, su relacion con el contexto es mínima o nula
+muestran una conexión sin demasiada profundidad en los detalles ni en su variedad.
+En los casos de geografía y asentamientos, su relación con el contexto es mínima o nula
 (ver figura \ref{fig:mistral-geo}), lo que sugiere que su entrenamiento no le permite ser
 flexible en la generación de contenido narrativo sin instrucciones previas.
 Este modelo pierde completamente el contexto al responder en español,
@@ -211,10 +211,10 @@ En el caso de \textit{worldbuilder},
 su comprensión de la entrada destacó sobre las alternativas generalistas,
 aportando ideas con una relación profunda con el contexto de entrada
 (Figura \ref{fig:worldbuilder-settle}).
-Sin embargo, el modelo también tiene una sensibilidad alta de temperatura
+Sin embargo, el modelo también tiene una sensibilidad alta a la temperatura
 y ocasionalmente puede ignorar la ambientación al generar nuevo contenido.
 Algo único de este LLM es que puede llegar a dar consejos al usuario de cómo
-hacer la construccion de mundos, con diversas técnicas y explicaciones,
+hacer la construcción de mundos, con diversas técnicas y explicaciones,
 en vez de dar una lista de nuevas ideas.
 También es el único que no puede dar respuestas en español.
 
@@ -231,7 +231,7 @@ Se ajustó al contexto de entrada y profundizó en las respuestas de forma acept
 Donde también destacó es en la capacidad de generar texto en español sin verse afectado
 en la calidad del mensaje. 
 
-A nivel global, todos los LLM funcionaron bien para los eventos y las localizaciones
+A nivel global, todos los LLM funcionaron bien para los eventos y las localizaciones,
 mientras que carecieron de originalidad en la generación de personajes y geografía.
 En la figura \ref{fig:rpmax-chars} se muestra un ejemplo de este fenómeno.
 
@@ -246,14 +246,13 @@ En la figura \ref{fig:rpmax-chars} se muestra un ejemplo de este fenómeno.
 %	SECTION 7
 %----------------------------------------------------------------------------------------
 \section{Pruebas con modelos generalistas y \textit{prompting} preciso}
-Esta sección analiza el rendimiento de modelos generalistas que no han sido específicamente
+Esta sección examina el rendimiento de modelos generalistas que no han sido específicamente
 ajustados para tareas de ambientación narrativa.
 A diferencia de enfoques anteriores sin refinamiento,
-en este caso se emplea \textit{prompting} preciso para maximizar la capacidad del modelo.
-El objetivo es evaluar qué tan eficaz puede ser una estrategia de instrucciones
-al trabajar con modelos accesibles públicamente.
+el objetivo aquí es maximizar la capacidad intrínseca del modelo mediante instrucciones detalladas,
+buscando determinar la eficacia de esta técnica al trabajar con modelos accesibles públicamente.
 
-Para ello, se hace uso del módulo de instrucciones y la página \textit{web}
+Para ello, se hace uso del módulo de instrucciones y la interfaz \textit{web}
 en su versión final. Tal y como se demuestra en la figura \ref{fig:full-prompt-test},
 el sistema construye la instrucción de forma transparente para el usuario, por lo que
 solo es necesario que se adjunte el fichero con el contexto narrativo.
@@ -266,14 +265,14 @@ solo es necesario que se adjunte el fichero con el contexto narrativo.
 \end{figure}
 
 \subsection{Resultados de \textit{deepseek}}
-Este modelo tuvo una mejora notable en la calidad de sus respuestas, tanto a nivel de profundidad
-contextual como en variedad de las ideas que aporta.
-El modelo es capaz de relacionar muchos más elementos de la ambientación narrativa y
-plasmarlo en las propuestas tanto en los eventos como en los personajes y geografía
+Este modelo experimentó una mejora sustancial en la calidad de sus respuestas, tanto en la profundidad
+contextual como en la variedad de las ideas que aporta.
+La capacidad del modelo para relacionar elementos de la ambientación narrativa y
+plasmarlos en las propuestas se vio significativamente potenciada, abarcando eventos, personajes y geografía
 (ver figura \ref{fig:deepseek-prompt-char}).
-La consistencia de las respuestas no varió,
-produciéndose raramente errores de formato y temática.
-El coste de responder en español también se vió reducido.
+La consistencia de las respuestas se mantuvo estable,
+reduciéndose notablemente la aparición de errores de formato y temática.
+Asimismo, el rendimiento en español mejoró, reduciendo el coste de la traducción.
 
 \begin{figure}[htbp]
 	\centering
@@ -283,15 +282,14 @@ El coste de responder en español también se vió reducido.
 \end{figure}
 \pagebreak
 \subsection{Resultados de \textit{mistral}}
-\textit{Mistral} no se adaptó adecuadamente a la ingeniería de instrucciones y 
-se volvió muy inconsistente.
-Cuando interpreta correctamente las instrucciones,
-muestra una ligera mejora en comparación a instrucciones básicas.
-Entre los errores más comunes se encuentra la duplicación de la lista y
-la perdida sustancial de la temática en la respuesta,
-lo que provoca que exceda los 10 elementos especificados por defecto
-y además guarden muy poca relación con el contexto general.
-Por último, el modelo pierde completamente su capacidad de responder en español.
+\textit{Mistral} mostró una adaptación inconsistente a la ingeniería de instrucciones precisas,
+lo que se tradujo en una alta variabilidad en sus respuestas.
+Aunque en algunos casos interpretó correctamente las directrices,
+mostrando una ligera mejora respecto a las instrucciones básicas,
+los errores fueron frecuentes. Entre los más comunes se incluyen la duplicación de la lista generada y
+una pérdida considerable de la temática en la respuesta. Esto a menudo resultaba en la generación de más de los 10 elementos especificados por defecto,
+con una relación mínima o nula con el contexto general.
+Además, el modelo perdió por completo su capacidad de generar respuestas en español bajo esta configuración.
 
 \begin{figure}[htbp]
 	\centering
@@ -304,14 +302,15 @@ Por último, el modelo pierde completamente su capacidad de responder en españo
 %	SECTION 8
 %----------------------------------------------------------------------------------------
 \section{Pruebas con modelos reentrenados y \textit{prompting} preciso}
-Finalmente, se realizan las pruebas sobre los modelos refinados e instrucciones precisas
-y se analizan sus resultados.
+Esta sección presenta y analiza los resultados obtenidos de las pruebas realizadas sobre los modelos refinados,
+empleando esta vez instrucciones precisas.
+
 \subsection{Resultados de \textit{writing-roleplay}}
-La compresión del LLM mejoró ligeramente,
-aunque esta mejora fue evidente principalmente en la generación de eventos.
-En cambio, en el resto de categorías el rendimiento se mantuvo similar al anterior.
-En varias ocasiones el modelo interpreta que debe generar una lista de varias decenas de puntos
-y esto provocó bloqueos en el modelo.
+La comprensión del LLM experimentó una ligera mejora,
+siendo esta más evidente en la generación de eventos.
+Sin embargo, en el resto de categorías, el rendimiento se mantuvo similar al observado con \textit{prompting} poco preciso.
+En varias ocasiones, el modelo interpretó que debía generar una lista de varias decenas de puntos,
+lo que provocó bloqueos en el sistema, indicando una posible sobrecarga o un fallo en el manejo de la longitud de la respuesta esperada.
 
 \begin{figure}[htbp]
 	\centering
@@ -321,12 +320,13 @@ y esto provocó bloqueos en el modelo.
 \end{figure}
 
 \subsection{Resultados de \textit{worldbuilder}}
-Con las nuevas instrucciones el modelo muestra
-una leve mejora en la comprensión del contexto de entrada
-y queda plasmada en la generación.
-No obstante, en el apartado de geografía y localizaciones no mostró ninguna mejora.
-En esta configuración también sufrió alucinaciones, como se muestra en la figura \ref{fig:worldbuilder-hallucination},
-que complejizaron el listado y devolvió varias listas con diferentes categorías.
+Con la aplicación de las nuevas instrucciones, el modelo mostró
+una mejora perceptible en la comprensión del contexto de entrada,
+lo cual se reflejó en la calidad de la generación.
+No obstante, en los apartados de geografía y localizaciones, no se observó una mejora significativa.
+En esta configuración, también se registraron alucinaciones, como se ilustra en la figura \ref{fig:worldbuilder-hallucination},
+que complejizaron el listado y llevaron a la devolución de varias listas con diferentes categorías,
+sugiriendo nuevamente una tendencia a desviarse de la estructura de respuesta esperada.
 
 \begin{figure}[htbp]
 	\centering
@@ -336,11 +336,11 @@ que complejizaron el listado y devolvió varias listas con diferentes categoría
 \end{figure}
 
 \subsection{Resultados de \textit{arliai-rpmax}}
-Gracias al refinamiento de los prompts,
-mejoró significativamente su comprensión e inclusión del contexto,
-y resultó en respuestas excepcionales.
-También destacó por su capacidad de generar texto en español
-manteniendo una calidad constante en el mensaje.
+Gracias al refinamiento de los \textit{prompts},
+este modelo mejoró significativamente su comprensión e inclusión del contexto,
+lo que resultó en respuestas de calidad excepcional.
+Además, \textit{arliai-rpmax} destacó por su robusta capacidad de generar texto en español,
+manteniendo una calidad constante en el mensaje sin degradación.
 
 \begin{figure}[htbp]
 	\centering
@@ -349,20 +349,20 @@ manteniendo una calidad constante en el mensaje.
 	\label{fig:rpmax-events}
 \end{figure}
 
-A nivel global, se observó una mejora clara en la generación de eventos de todos los LLM,
-en comparación con evaluaciones anteriores.
-Sin embargo, los resultados no fueron tan positivos en lo referente a la creación de personajes,
+A nivel global, se observó una mejora consistente en la generación de eventos por parte de todos los LLM,
+en comparación con las evaluaciones previas.
+Sin embargo, los resultados no fueron tan favorables en la creación de personajes,
 la geografía y las localizaciones,
-donde los modelos continuaron mostrando una falta de originalidad y variedad.
-Queda por estudiar si este fenómeno es producto del sobreentrenamiento o escasez de información
-en la ambientación narrativa mpleada en los ensayos.
+donde los modelos continuaron exhibiendo limitaciones en originalidad y variedad.
+Este fenómeno plantea la necesidad de investigar si se debe a un posible sobreentrenamiento en ciertas categorías
+o a una escasez de información contextual relevante en la ambientación narrativa empleada en los ensayos.
 
 %----------------------------------------------------------------------------------------
 %	SECTION 9
 %----------------------------------------------------------------------------------------
 \section{Interpretación de resultados}
 Previo al análisis global del rendimiento del sistema,
-se han confeccionado dos grillas resumen que muestra cómo ha funcionado
+se han confeccionado dos grillas resumen que muestran cómo ha funcionado
 cada combinación de modelo y estrategia de instrucciones a lo largo de la experimentación.
 En ella, cada celda contiene una valoración del 1 al 5,
 donde 1 indica un desempeño insuficiente y 5 refleja una ejecución excelente.
@@ -417,13 +417,13 @@ Teniendo en cuenta las puntuaciones, se pueden sacar las siguientes conclusiones
 	  que han sido reentrenados para la generación de contenido narrativo.
 \item Es muy importante realizar una configuración de temperatura específica
       en cada modelo para limitar la aleatoriedad de la estructura de las respuestas.
-\item Todos los modelos presentaron rigidez en la creación de algunos elementos narrativos
-      posiblemente por requerir un mayor nivel de creatividad o por no tener suficiente contexto previo.
-\item La estrategia de instrucciones desarrollada mejora notablemente la capacidad de profundizar en El
-      contexto de entrada y plasmarlo en la salida a costa de aumentar su inestabilidad en algunos casos.
+\item Todos los modelos presentaron rigidez en la creación de algunos elementos narrativos,
+	  posiblemente por requerir un mayor nivel de creatividad o por no tener suficiente contexto previo.
+\item La estrategia de instrucciones desarrollada mejora notablemente la capacidad de profundizar en el
+      contexto de entrada y plasmarlo en la salida, a costa de aumentar su inestabilidad en algunos casos.
 \end{itemize}
 
-Durante las pruebas se econtraron los siguientes errores con una frecuencia o gravedad considerables:
+Durante las pruebas se encontraron los siguientes errores con una frecuencia o gravedad considerables:
 \begin{itemize}
 \item Error de formato:
 	  aunque no se trata de un problema con un impacto notable,
@@ -431,17 +431,17 @@ Durante las pruebas se econtraron los siguientes errores con una frecuencia o gr
 	  A veces empleaba listas de puntos, otras veces listas numeradas y, en raras ocasiones,
 	  ignoró el formato y lo separó en párrafos.
 	  Se estudió la posibilidad de forzar la salida de forma estructurada, pero los modelos no
-	  respondieron positivamente al cambio por lo que se concluyó que se implementará en trabajos futuros.
-\item Tendencia de los LLM de generar preámbulo y resumen final:
+	  respondieron positivamente al cambio, por lo que se concluyó que se implementará en trabajos futuros.
+\item Tendencia de los LLM a generar preámbulo y resumen final:
       relacionado con el punto anterior,
 	  algunos modelos tenían la tendencia de añadir información adicional alrededor de la lista de ideas.
 	  En muchos de los casos, parafraseando las instrucciones recibidas por el módulo de instrucciones.
 \item Errores de traducción: la mayoría de los modelos empeoraron su rendimiento al forzar su salida de 
-      texto en español. Esto puede mitigarse integrando un modelo encoder especializado en traducción
+      texto en español. Esto puede mitigarse integrando un modelo \textit{encoder} especializado en traducción
 	  que actúe como etapa previa y posterior al modelo generador.
 \item Procesamiento ``infinito'' de las peticiones:
-      aunque ocurrió en contadas ocasiones, este fenómeno provocaba que los modelos se quedaran
-	  generando un texto demasiado largo, lo que provocaba que su tiempo de respuesta aumente
+	  aunque ocurrió en contadas ocasiones, este fenómeno provocaba que los modelos se quedaran
+	  generando un texto demasiado largo, lo que hacía que su tiempo de respuesta aumentara
 	  de unos pocos segundos a varios minutos, dando a entender que el sistema se había quedado bloqueado.
 	  Este problema se puede mitigar mostrando este proceso de acumulación de palabras en tiempo real
 	  o forzando su finalización tras alcanzar un tiempo o extensión configurable.
