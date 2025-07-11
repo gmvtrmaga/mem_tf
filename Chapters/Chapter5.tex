@@ -1,37 +1,92 @@
 % Chapter Template
 
 \chapter{Conclusiones} % Main chapter title
-
-\label{Chapter5} % Change X to a consecutive number; for referencing this chapter elsewhere, use \ref{ChapterX}
-Todos los capítulos deben comenzar con un breve párrafo introductorio que indique cuál es el contenido que se encontrará al leerlo.  La redacción sobre el contenido de la memoria debe hacerse en presente y todo lo referido al proyecto en pasado, siempre de modo impersonal.
-
-
-%----------------------------------------------------------------------------------------
+En este capítulo final se engloban las conclusiones más relevantes del trabajo realizado
+y se presentan posibles líneas de mejora de la solución alcanzada.
 
 %----------------------------------------------------------------------------------------
 %	SECTION 1
 %----------------------------------------------------------------------------------------
 
-\section{Conclusiones generales }
+\section{Conclusiones generales}
 
-La idea de esta sección es resaltar cuáles son los principales aportes del trabajo realizado y cómo se podría continuar. Debe ser especialmente breve y concisa. Es buena idea usar un listado para enumerar los logros obtenidos.
-
-En esta sección no se deben incluir ni tablas ni gráficos.
-
-Algunas preguntas que pueden servir para completar este capítulo:
+Tras el desarrollo del presente trabajo se pueden alcanzar las siguientes conclusiones:
 
 \begin{itemize}
-\item ¿Cuál es el grado de cumplimiento de los requerimientos?
-\item ¿Cuán fielmente se puedo seguir la planificación original (cronograma incluido)?
-\item ¿Se manifestó algunos de los riesgos identificados en la planificación? ¿Fue efectivo el plan de mitigación? ¿Se debió aplicar alguna otra acción no contemplada previamente?
-\item Si se debieron hacer modificaciones a lo planificado ¿Cuáles fueron las causas y los efectos?
-\item ¿Qué técnicas resultaron útiles para el desarrollo del proyecto y cuáles no tanto?
+\item Los requerimientos de la planificacion del proyecto fueron alcanzados
+      satisfactoriamente.
+      El prototipo desarrollado supone un buen punto de partida para el estudio de
+      la inclusión de la inteligencia artificial generativa como servicios para
+      los usuarios que utilizan la \textit{app} de Critical Match.
+      Además, la correcta separación de módulos permite al cliente ampliar el desarrollo
+      de forma simple y efectiva.
+      Por ultimo, los requerimientos de privacidad, propiedad intelectual y restricciones legales
+      quedan amparadas por un módulo de modelos extensos de lenguaje que puede ser operado
+      de forma local y sin conexión de internet.     
+\item Hubo un retraso considerable en los tiempos estimados del proyecto debido a
+      circunstancias académicas, personales y de \textit{hardware}.
+      Sin embargo, ese tiempo de diseño y desarrollo adicional permitió alcanzar un sistema
+      notablemente superior al diseñado en las primeras fases del proyecto. 
+      A consecuencia de esto, muchas tareas fueron simplificadas y se alcanzó una flexibilidad
+      en el sistema ideal para un prototipo.
+\item Los riesgos relacionados con la capacidad de computación y los retrasos en el proyecto
+      se materializaron con la severidad prevista.
+      Aunque no comprometieron el éxito del proyecto,
+      sí afectaron de forma significativa el plazo para su finalización.
+\item Se resalta el valor práctico de la herramienta LM Studio,
+      la cual no solo ha simplificado muchas de las tareas clave del proyecto,
+      sino que también contribuye significativamente a la viabilidad de desarrollos futuros.
+      El uso de servidores de este tipo resulta fundamental en un contexto donde
+      la evolución de los modelos de lenguaje se encuentra en una situación de constantes cambios.
 \end{itemize}
-
-
 %----------------------------------------------------------------------------------------
 %	SECTION 2
 %----------------------------------------------------------------------------------------
 \section{Próximos pasos}
+Al ser un prototipo, el proyecto ofrece un amplio margen para futuras ampliaciones.
+Se presentan a continuación algunas direcciones posibles:
 
-Acá se indica cómo se podría continuar el trabajo más adelante.
+\begin{itemize}
+\item Interfaz \text{web}:
+      aunque no está diseñado para un uso directo por parte de usuarios finales,
+      es posible incorporar campos como la temperatura o la selección del modelo
+      al que se desea realizar la petición, especialmente si el sistema se despliega
+      en una máquina capaz de alojar múltiples modelos en paralelo.
+\item Creación y entrenamiento fino de un LLM propio:
+      desarrollar un modelo propio y ajustarlo mediante \textit{fine-tuning}
+      permitiría adaptarlo de forma precisa al dominio narrativo,
+      los estilos de respuesta deseados y las necesidades específicas del sistema,
+      mejorando la coherencia, la creatividad o la eficiencia computacional.
+      Para lograr esto será necesario contar con un banco de datos considerable y la
+      implementación de análisis de datos.
+\item Implementación de \textit{Mixture of Experts}:
+      si se cuenta con la infraestructura que permita la ejecución de varios LLM en paralelo,
+      integrar una arquitectura basada en mezcla de expertos permitiría distribuir
+      la carga entre modelos especializados.
+      Esto aumentaría la eficiencia del sistema y permitiría
+      respuestas más ajustadas dependiendo del tipo de contenido solicitado.
+\item Implementación de \text{structured output}:
+      adoptar salidas estructuradas en lugar de texto libre 
+      facilitaría la integración con otros sistemas
+      y permitiría una validación automática del contenido generado,
+      además de estructurar los mensajes de respuesta de forma unequívoca.
+      LM Studio permite añadir esquemas JSON para la salida estructurada de los modelos,
+      por lo que solo requeriría el uso de LLMs compatibles y una ingeniería debe
+      instrucciones adecuada.
+\item Uso de RAGs:
+      la incorporación de sistemas de generación aumentada por recuperación
+      permitiría enriquecer las respuestas generadas mediante la consulta de
+      fuentes externas o bases de conocimiento previas.
+      Esto puede mejorar la precisión factual, la consistencia del mundo narrativo
+      y la personalización en tiempo real.
+      Para operar un RAG es fundamental contar con una base de datos bien estructurado
+      y con un volumen de datos considerable.
+\end{itemize}
+
+En definitiva, las propuestas aquí expuestas ofrecen un camino claro para potenciar
+y consolidar la solución desarrollada.
+La implementación de estas mejoras no solo ampliará las capacidades técnicas del sistema,
+sino que también permitirá una mayor adaptabilidad a diferentes contextos
+y necesidades narrativas.
+De este modo, el prototipo podrá evolucionar hacia una herramienta robusta y versátil,
+capaz de ofrecer respuestas más precisas, coherentes y personalizadas en futuros proyectos.
