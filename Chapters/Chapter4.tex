@@ -132,7 +132,7 @@ teniendo en cuenta que todos fueron configurados con una temperatura de 0,7 sobr
 %----------------------------------------------------------------------------------------
 %	SECTION 5
 %----------------------------------------------------------------------------------------
-\section{Pruebas con modelos generalistas y prompting poco preciso}
+\section{Pruebas con modelos generalistas y \textit{prompting} poco preciso}
 Esta sección analiza el rendimiento de los modelos que no han sido ajustados específicamente
 para tareas de ambientación narrativa y que carecen de un refinamiento adecuado en las instrucciones.
 El objetivo es simular los resultados que podrían obtenerse si una persona sin experiencia en ingeniería de
@@ -152,6 +152,7 @@ Una vez validada la funcionalidad, todas las instrucciones se simplificaron en u
 	\label{fig:prompt-test}
 \end{figure}
 
+\subsection{Resultados de \textit{deepseek}}
 En el caso de \textit{deepseek}, presentó una adaptación al contexto narrativo aceptable y se ciñó correctamente al
 tipo de elemento narrativo que se especificó.
 No obstante, su desempeño en relación a la variedad de las ideas fue baja al presentar puntos muy similares entre sí.
@@ -164,10 +165,11 @@ tal y como se muestra en la figura \ref{fig:deepseek-esp}:
 \begin{figure}[htbp]
 	\centering
 	\includegraphics[width=1\textwidth]{./Figures/deepseek-noprompt-spanish.png}
-	\caption{Resultado en español de deepseek para eventos.}
+	\caption{Resultado en español de \textit{deepseek} para eventos.}
 	\label{fig:deepseek-esp}
 \end{figure}
 \pagebreak
+\subsection{Resultados de \textit{mistral}}
 El modelo generalista de \textit{mistral} no consiguió la misma calidad en sus respuestas.
 Las propuestas, aunque tienen relación con el contexto de la historia,
 es una conexión sin demasiada profundidad en los detalles ni en su variedad.
@@ -181,19 +183,20 @@ como ciudades de Estados Unidos, personajes históricos o festividades internaci
 \begin{figure}[htbp]
 	\centering
 	\includegraphics[width=1\textwidth]{./Figures/mistral-noprompt-geography.png}
-	\caption{Resultado de mistral para geografía}
+	\caption{Resultado de \textit{mistral} para geografía}
 	\label{fig:mistral-geo}
 \end{figure}
 
 %----------------------------------------------------------------------------------------
 %	SECTION 6
 %----------------------------------------------------------------------------------------
-\section{Pruebas con modelos reentrenados y prompting poco preciso}
+\section{Pruebas con modelos reentrenados y \textit{prompting} poco preciso}
 Análogamente a la sección anterior, se llevaron a cabo pruebas equivalentes
-sobre los modelos \textit{fine-tuneados} con el fin de evaluar su rendimiento.
+sobre los modelos refinados con el fin de evaluar su rendimiento.
 Los resultados permiten establecer una comparación entre estos LLM
 y los modelos generalistas.
 
+\subsection{Resultados de \textit{writing-roleplay}}
 El modelo de \textit{writing-roleplay} funcionó correctamente en la generación de eventos,
 comprendiendo adecuadamente el contexto y ofreciendo ideas interesantes.
 Sin embargo, presentó problemas en el resto de elementos narrativos.
@@ -203,6 +206,7 @@ narrativa del fichero adjunto.
 Finalmente, fue notoria la inconsistencia del modelo a la temperatura a la que fue configurado,
 ya que ocasionalmente repetía información en vez de aportar ideas nuevas.
 
+\subsection{Resultados de \textit{worldbuilder}}
 En el caso de \textit{worldbuilder},
 su comprensión de la entrada destacó sobre las alternativas generalistas,
 aportando ideas con una relación profunda con el contexto de entrada
@@ -217,10 +221,11 @@ También es el único que no puede dar respuestas en español.
 \begin{figure}[htbp]
 	\centering
 	\includegraphics[width=1\textwidth]{./Figures/worldbuilder-noprompt-settlements.png}
-	\caption{Resultado de worldbuilder para asentamientos}
+	\caption{Resultado de \textit{worldbuilder} para asentamientos}
 	\label{fig:worldbuilder-settle}
 \end{figure}
 
+\subsection{Resultados de \textit{arliai-rpmax}}
 Finalmente, el modelo \textit{arliai-rpmax} fue el que mejor desempeño demostró. 
 Se ajustó al contexto de entrada y profundizó en las respuestas de forma aceptable.
 Donde también destacó es en la capacidad de generar texto en español sin verse afectado
@@ -233,6 +238,126 @@ En la figura \ref{fig:rpmax-chars} se muestra un ejemplo de este fenómeno.
 \begin{figure}[htbp]
 	\centering
 	\includegraphics[width=1\textwidth]{./Figures/rpmax-noprompt-chars.png}
-	\caption{Resultado de arliai-rpmax para personajes}
+	\caption{Resultado de \textit{arliai-rpmax} para personajes}
 	\label{fig:rpmax-chars}
 \end{figure}
+
+%----------------------------------------------------------------------------------------
+%	SECTION 7
+%----------------------------------------------------------------------------------------
+\section{Pruebas con modelos generalistas y \textit{prompting} preciso}
+Esta sección analiza el rendimiento de modelos generalistas que no han sido específicamente
+ajustados para tareas de ambientación narrativa.
+A diferencia de enfoques anteriores sin refinamiento,
+en este caso se emplea \textit{prompting} preciso para maximizar la capacidad del modelo.
+El objetivo es evaluar qué tan eficaz puede ser una estrategia de instrucciones
+al trabajar con modelos accesibles públicamente.
+
+Para ello, se hace uso del módulo de instrucciones y la página \textit{web}
+en su versión final. Tal y como se demuestra en la figura \ref{fig:full-prompt-test},
+el sistema construye la instrucción de forma transparente para el usuario, por lo que
+solo es necesario que se adjunte el fichero con el contexto narrativo.
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.85\textwidth]{./Figures/full-promp-testing.png}
+	\caption{Prueba de la versión definitiva del sistema.}
+	\label{fig:full-prompt-test}
+\end{figure}
+
+\subsection{Resultados de \textit{deepseek}}
+Este modelo tuvo una mejora notable en la calidad de sus respuestas, tanto a nivel de profundidad
+contextual como en variedad de las ideas que aporta.
+El modelo es capaz de relacionar muchos más elementos de la ambientación narrativa y
+plasmarlo en las propuestas tanto en los eventos como en los personajes y geografía
+(ver figura \ref{fig:deepseek-prompt-char}).
+La consistencia de las respuestas no varió,
+produciéndose raramente errores de formato y temática.
+El coste de responder en español también se vió reducido.
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=1\textwidth]{./Figures/deepseek-prompt-characters.png}
+	\caption{Resultado de \textit{deepseek} para personajes.}
+	\label{fig:deepseek-prompt-char}
+\end{figure}
+\pagebreak
+\subsection{Resultados de \textit{mistral}}
+\textit{Mistral} no se adaptó adecuadamente a la ingeniería de instrucciones y 
+se volvió muy inconsistente.
+Cuando interpreta correctamente las instrucciones,
+muestra una ligera mejora en comparación a instrucciones básicas.
+Entre los errores más comunes se encuentra la duplicación de la lista y
+la perdida sustancial de la temática en la respuesta,
+lo que provoca que exceda los 10 elementos especificados por defecto
+y además guarden muy poca relación con el contexto general.
+Por último, el modelo pierde completamente su capacidad de responder en español.
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=1\textwidth]{./Figures/mistral-prompt-locations.png}
+	\caption{Resultado de \textit{mistral} para localizaciones.}
+	\label{fig:mistral-prompt-locations}
+\end{figure}
+
+%----------------------------------------------------------------------------------------
+%	SECTION 8
+%----------------------------------------------------------------------------------------
+\section{Pruebas con modelos reentrenados y \textit{prompting} preciso}
+Finalmente, se realizan las pruebas sobre los modelos refinados e instrucciones precisas
+y se analizan sus resultados.
+\subsection{Resultados de \textit{writing-roleplay}}
+La compresión del LLM mejoró ligeramente,
+aunque esta mejora fue evidente principalmente en la generación de eventos.
+En cambio, en el resto de categorías el rendimiento se mantuvo similar al anterior.
+En varias ocasiones el modelo interpreta que debe generar una lista de varias decenas de puntos
+y esto provocó bloqueos en el modelo.
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=1\textwidth]{./Figures/writing-prompt-geography.png}
+	\caption{Alucinación de \textit{writing-roleplay} para geografía.}
+	\label{fig:writing-geography}
+\end{figure}
+
+\subsection{Resultados de \textit{worldbuilder}}
+Con las nuevas instrucciones el modelo muestra
+una leve mejora en la comprensión del contexto de entrada
+y queda plasmada en la generación.
+No obstante, en el apartado de geografía y localizaciones no mostró ninguna mejora.
+En esta configuración también sufrió alucinaciones, como se muestra en la figura \ref{fig:worldbuilder-hallucination},
+que complejizaron el listado y devolvió varias listas con diferentes categorías.
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=1\textwidth]{./Figures/worldbuilder-hallucination-events.png}
+	\caption{Alucinación de \textit{worldbuilder} en la generación de eventos.}
+	\label{fig:worldbuilder-hallucination}
+\end{figure}
+
+\subsection{Resultados de \textit{arliai-rpmax}}
+Gracias al refinamiento de los prompts,
+mejoró significativamente su comprensión e inclusión del contexto,
+y resultó en respuestas excepcionales.
+También destacó por su capacidad de generar texto en español
+manteniendo una calidad constante en el mensaje.
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=1\textwidth]{./Figures/rpmax-prompt-events.png}
+	\caption{Resultado de \textit{arliai-rpmax} en la generación de eventos.}
+	\label{fig:rpmax-events}
+\end{figure}
+
+A nivel global, se observó una mejora clara en la generación de eventos de todos los LLM,
+en comparación con evaluaciones anteriores.
+Sin embargo, los resultados no fueron tan positivos en lo referente a la creación de personajes,
+la geografía y las localizaciones,
+donde los modelos continuaron mostrando una falta de originalidad y variedad.
+Queda por estudiar si este fenómeno es producto del sobreentrenamiento o escasez de información
+en la ambientación narrativa mpleada en los ensayos.
+
+%----------------------------------------------------------------------------------------
+%	SECTION 9
+%----------------------------------------------------------------------------------------
+\section{Interpretación de resultados}
